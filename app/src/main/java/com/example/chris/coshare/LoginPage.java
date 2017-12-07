@@ -1,5 +1,6 @@
 package com.example.chris.coshare;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -72,6 +73,10 @@ public class LoginPage extends AppCompatActivity {
 
     //intent @Qitai to the sign up page
     public void registerhere (View view){
+        Context context = view.getContext();
         Toast.makeText(LoginPage.this, "Register!", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(context,Signuppage.class);
+        startActivity(intent);
+
     }
 }

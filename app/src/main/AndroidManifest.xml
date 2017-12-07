@@ -16,19 +16,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity
-            android:name=".HomePage">
-
-        </activity>
+        <activity android:name=".HomePage" />
         <activity
             android:name=".AccountPage"
-            android:parentActivityName="com.example.chris.coshare.HomePage">
+            android:parentActivityName=".HomePage" />
 
-        </activity>
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.chris.coshare.HomePage" />
+
+        <activity android:name=".Signuppage" />
+        <activity android:name=".fragmentActivity"></activity>
     </application>
 
 </manifest>

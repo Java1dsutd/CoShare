@@ -19,18 +19,18 @@
         android:textAlignment="center"
         android:textSize="24sp" />
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/cancelRV"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_alignParentLeft="true"-->
-        <!--android:layout_alignParentStart="true"-->
-        <!--app:layoutManager="LinearLayoutManager"-->
-        <!--android:layout_below="@+id/textView3" />-->
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        android:id="@+id/cancelRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        app:layoutManager="LinearLayoutManager"
+        android:layout_below="@+id/textView3" />
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/recyclerview"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+    <!--</android.support.v7.widget.RecyclerView>-->
 
 </RelativeLayout>

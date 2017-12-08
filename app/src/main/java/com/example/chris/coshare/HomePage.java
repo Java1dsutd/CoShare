@@ -188,12 +188,29 @@ public class HomePage extends AppCompatActivity {
         startActivity(intent);
         return true;
     }
-    //Imagebutton link to account activity
+//    //Imagebutton link to account activity
+//    public void accountIntent (View view) {
+//        Intent intent =new Intent(HomePage.this, AccountPage.class);
+//        startActivity(intent);
+//    }
+
+    //add your intents here edmund
     public void accountIntent (View view) {
         Intent intent =new Intent(HomePage.this, AccountPage.class);
         startActivity(intent);
     }
 
-    //add your intents here edmund
+    public void addBookingIntent(View v) {
+        Intent intent = new Intent(HomePage.this, AddBookingPage.class);
+        startActivity(intent);
+    }
+    public void viewBookingIntent(View v) {
+        Intent intent = new Intent(HomePage.this, ViewBookingPage.class);
+        startActivity(intent);
+    }
+    public void cancelBookingIntent(View v) {
+        Intent intent = new Intent(HomePage.this, CancelBookingPage.class);
+        startActivity(intent);
+    }
 
 }

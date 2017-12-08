@@ -35,6 +35,9 @@
 
         <activity android:name=".Signuppage" />
         <activity android:name=".fragmentActivity" />
+        <activity android:name=".ViewBookingPage" />
+        <activity android:name=".AddBookingPage" />
+        <activity android:name=".CancelBookingPage" />
         <activity android:name=".CameraActivity"></activity>
     </application>
 

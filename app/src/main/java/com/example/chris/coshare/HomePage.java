@@ -118,6 +118,9 @@ public class HomePage extends AppCompatActivity {
                                 if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied
                                     Toast.makeText(getApplicationContext(), "Welcome " + Occupant, Toast.LENGTH_LONG).show();
                                     myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(false);
+                                    Integer currentPoint = dataSnapshot.child("Users").child(phoneNumber).child("Points").getValue(Integer.class);
+                                    Integer newPoint = currentPoint + 50;
+                                    myRef.child("Users").child(phoneNumber).child("Points").setValue(newPoint);
 
                                 } else { //User scanned the wrong table
                                     AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();

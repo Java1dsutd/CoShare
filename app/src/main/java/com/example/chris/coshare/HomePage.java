@@ -85,7 +85,7 @@ public class HomePage extends AppCompatActivity {
 
         placeID = new HashMap<String, String>();
         placeID.put("1", "Bugis");
-        placeID.put("2", "Tampines");
+        placeID.put("2", "Orchard");
 
         tableID = getIntent().getStringExtra("barcode"); //get the data from the camera live view intent
 

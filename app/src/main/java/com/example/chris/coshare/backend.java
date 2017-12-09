@@ -52,10 +52,14 @@ public class backend {
         String PersonaltableLocation = dataSnapshot.child(phoneNumber).child("Table Info").child("Location").getValue().toString();
         String PersonaltableID = dataSnapshot.child(phoneNumber).child("Table Info").child("TableID").getValue().toString();
         String PersononalBookingStatus = dataSnapshot.child(phoneNumber).child("Booking Status").getValue().toString();
+        String LatestBookingDate = dataSnapshot.child(phoneNumber).child("Date").getValue().toString();
+        String LatestBookingLocation = dataSnapshot.child(phoneNumber).child("Latest Location").getValue().toString();
         personalinfo.add(name);
         personalinfo.add(PersonaltableLocation);
         personalinfo.add(PersonaltableID);
         personalinfo.add(PersononalBookingStatus);
+        personalinfo.add(LatestBookingDate);
+        personalinfo.add(LatestBookingLocation);
         return personalinfo;
     }
 

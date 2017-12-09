@@ -14,6 +14,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -22,15 +24,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class HomePage extends AppCompatActivity {
-
-
     ImageButton add;
     ImageButton cancel;
     ImageButton account;
     ImageButton view;
+    ImageView locationPic;
+    TextView locationText;
 
     private FirebaseDatabase firebase;
     private DatabaseReference myRef;
@@ -47,6 +50,15 @@ public class HomePage extends AppCompatActivity {
     private String Occupant;
     private String tableDigit;
 
+    String tableLocation;
+    ArrayList<String> personalDetails;
+    String phoneNumber;
+    String date;
+
+    FirebaseDatabase database;
+    DatabaseReference DBrefLocations;
+    backend be;
+
     private SharedPreferences sharedPreferences;
     private String nameOfSharedPreferences = "Details";
     @Override
@@ -54,10 +66,17 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.homepage);
 
+        phoneNumber="83423995";
+        database= FirebaseDatabase.getInstance();
+        DBrefLocations = database.getReference().child("Users");
+        personalDetails=new ArrayList<>();
+
         add = (ImageButton) findViewById(R.id.addButton);
         cancel = (ImageButton) findViewById(R.id.cancelButton);
         account = (ImageButton) findViewById(R.id.accountButton);
         view = (ImageButton) findViewById(R.id.viewButton);
+        locationPic = (ImageView) findViewById(R.id.locationPic);
+        locationText = (TextView)findViewById(R.id.bookingDetailsTV);
 
         firebase = FirebaseDatabase.getInstance("https://coshare-795d4.firebaseio.com/");
         myRef = firebase.getReference(); //get access to the root of the Firebase JSON tree
@@ -173,6 +192,40 @@ public class HomePage extends AppCompatActivity {
 
             }
         });
+
+        be=new backend();
+        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
+                tableLocation=personalDetails.get(5);
+                date = personalDetails.get(4);
+                System.out.println(date);
+
+                if (tableLocation.equals("Bugis")){
+                    Log.i("in if statement" , tableLocation);
+                    locationPic.setImageResource(R.drawable.bugis);
+                }
+
+                else if (tableLocation.equals("Orchard")){
+                    locationPic.setImageResource(R.drawable.orchard);
+                }
+
+
+                //set location
+                locationText.setText(tableLocation +  "\n" + date);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+
 
     }
 

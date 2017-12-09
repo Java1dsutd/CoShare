@@ -32,14 +32,11 @@ public class backend {
         return name;
     }
 
-    public Boolean Book(DataSnapshot snapshot, String location, String tableid, long addpoint, String phoneno) { //snapshot at database
+    public Boolean Book(DataSnapshot snapshot, String location, String tableid,String phoneno) { //snapshot at database
         if ((boolean)snapshot.child("Locations").child(location).child(tableid).child("Availability").getValue() == true) { //if table available
             DBrefLocations.child(location).child(tableid).child("Availability").setValue(false);  //not available anymore
             DBrefLocations.child(location).child(tableid).child("Occupant").setValue(DBrefUsers.child(phoneno).toString()); //fill in booker
             DBrefUsers.child(phoneno).child("Booking Status").setValue("booked"); //set user booking status to booked
-            int points = (int) snapshot.child("Users").child(phoneno).child("Points").getValue();
-            points += addpoint; //yay gain points
-            DBrefUsers.child(phoneno).child("Points").setValue(points); //update points
             int locationcount = (int) snapshot.child("Users").child(phoneno).child("Locations").child(location).getValue();//retrieve location count
             locationcount += 1; //increase by 1
             DBrefUsers.child(phoneno).child("Locations").child(location).setValue(locationcount);//update locationcount

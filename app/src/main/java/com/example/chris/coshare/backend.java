@@ -106,7 +106,7 @@ public class backend {
 
     public HashMap<String,Long> getLocationsVisited(DataSnapshot dataSnapshot, String phoneNumber){
         HashMap<String,Long> loc=new HashMap();
-        Iterable<DataSnapshot> locations=dataSnapshot.child("Locations").getChildren();
+        Iterable<DataSnapshot> locations=dataSnapshot.child(phoneNumber).child("Locations").getChildren();
         Log.i("check","Triggered");
         for(DataSnapshot dsp : locations){
             String key=dsp.getKey().toString();
@@ -116,4 +116,14 @@ public class backend {
         }
         return loc;
     }
+
+    /*public String getTablesOwner(DataSnapshot dataSnapshot, String phoneNumber, String tableLocation, String tableID, String PersonalBookingStatus) {
+        String currentUser = null;
+        boolean currentStatus = (boolean) dataSnapshot.child(phoneNumber).child(tableLocation).child(tableID).child("Availability").getValue();
+        if (PersonalBookingStatus == "booked" && currentStatus == true) {
+            currentUser = dataSnapshot.child(phoneNumber).child(tableLocation).child(tableID).child("Occupant").getValue().toString();
+        }
+        return currentUser;
+
+    }*/
 }

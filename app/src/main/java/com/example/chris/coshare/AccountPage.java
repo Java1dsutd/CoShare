@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Created by Michelle on 12/5/2017.
  */
 
-public class AccountPage extends AppCompatActivity {
+public class    AccountPage extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference DBrefUsers;
     DatabaseReference DBrefLocations;

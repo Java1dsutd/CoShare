@@ -57,8 +57,8 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
 
         //Firebase
         database = FirebaseDatabase.getInstance();
-        DBrefUsers = database.getReference().child("Locations");
-        DBrefLocations = database.getReference().child("Users");
+        DBrefUsers = database.getReference().child("Users");
+        DBrefLocations = database.getReference().child("Locations");
         tabledata=new HashMap<>();
         be= new backend();
 

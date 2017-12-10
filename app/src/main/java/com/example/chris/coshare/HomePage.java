@@ -32,8 +32,11 @@ public class HomePage extends AppCompatActivity {
     ImageButton cancel;
     ImageButton account;
     ImageButton view;
-    ImageView locationPic;
+
+    ImageButton locationPic;
     TextView locationText;
+
+    String location;
 
     private FirebaseDatabase firebase;
     private DatabaseReference myRef;
@@ -75,7 +78,7 @@ public class HomePage extends AppCompatActivity {
         cancel = (ImageButton) findViewById(R.id.cancelButton);
         account = (ImageButton) findViewById(R.id.accountButton);
         view = (ImageButton) findViewById(R.id.viewButton);
-        locationPic = (ImageView) findViewById(R.id.locationPic);
+        locationPic = (ImageButton) findViewById(R.id.locationPic);
         locationText = (TextView)findViewById(R.id.bookingDetailsTV);
 
         firebase = FirebaseDatabase.getInstance("https://coshare-795d4.firebaseio.com/");
@@ -203,15 +206,19 @@ public class HomePage extends AppCompatActivity {
                 personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
                 tableLocation=personalDetails.get(5);
                 date = personalDetails.get(4);
-                System.out.println(date);
+
 
                 if (tableLocation.equals("Bugis")){
                     Log.i("in if statement" , tableLocation);
                     locationPic.setImageResource(R.drawable.bugis);
+                    location = tableLocation + " Junction Tower";
+                    locationText.setText(location +  "\n" + date);
                 }
 
                 else if (tableLocation.equals("Orchard")){
                     locationPic.setImageResource(R.drawable.orchard);
+                    location = tableLocation + " Tower";
+                    locationText.setText(location +  "\n" + date);
                 }
 
 
@@ -249,6 +256,13 @@ public class HomePage extends AppCompatActivity {
 //        Intent intent =new Intent(HomePage.this, AccountPage.class);
 //        startActivity(intent);
 //    }
+
+    public void getDirection (View view) {
+        Intent intentB = new Intent(HomePage.this, GetDirections.class);
+        intentB.putExtra("LOCATION", location);
+        startActivity (intentB);
+
+    }
 
     //add your intents here edmund
     public void accountIntent (View view) {

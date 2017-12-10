@@ -29,9 +29,18 @@
             android:name=".AccountPage"
             android:parentActivityName=".HomePage" />
 
+        <activity android:name=".GetDirections"
+            android:parentActivityName=".HomePage">
+
+        </activity>
+
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
             android:value="com.example.chris.coshare.HomePage" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAgDzt8QYJ2xzRTCQWteZE56Y8jUzLSqGM"/>
 
         <activity android:name=".Signuppage" />
         <activity android:name=".fragmentActivity" />

@@ -50,7 +50,7 @@
             tools:context=".GridXMLActivity">
 
 
-            <ImageView
+            <ImageButton
                 android:id="@+id/locationPic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,6 +59,8 @@
                 android:layout_gravity="fill"
                 android:layout_row="0"
                 android:layout_rowWeight="1"
+                android:background="#393939"
+                android:onClick="getDirection"
                 android:src="@drawable/telepark" />
 
             <TextView
@@ -73,7 +75,7 @@
                 android:text="Tampines Telepark \n23 December 2017"
                 android:textAlignment="center"
                 android:textColor="#ffffff"
-                android:textSize="19sp" />
+                android:textSize="15sp" />
 
         </GridLayout>
 

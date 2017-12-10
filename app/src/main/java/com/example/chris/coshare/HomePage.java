@@ -222,8 +222,6 @@ public class HomePage extends AppCompatActivity {
                 }
 
 
-                //set location
-                locationText.setText(tableLocation +  "\n" + date);
 
 
             }

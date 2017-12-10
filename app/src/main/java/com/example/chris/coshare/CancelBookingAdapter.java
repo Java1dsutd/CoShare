@@ -105,11 +105,13 @@ import java.util.List;
 public class CancelBookingAdapter extends RecyclerView.Adapter<CancelBookingAdapter.ViewHolder> {
 
     private List<DataModel> mItems;
+    private List<String> sItems;
     private Context mContext;
 
-    public CancelBookingAdapter(Context context, List<DataModel> items) {
+    public CancelBookingAdapter(Context context, List<String> items) {
         this.mContext = context;
-        this.mItems = items;
+//        this.mItems = items;
+        this.sItems = items;
     }
 
     @Override
@@ -122,9 +124,10 @@ public class CancelBookingAdapter extends RecyclerView.Adapter<CancelBookingAdap
 
     @Override
     public void onBindViewHolder(CancelBookingAdapter.ViewHolder holder, int position) {
-        DataModel item = mItems.get(position);
-
-        holder.tvName.setText(item.getLocationName());
+//        DataModel item = mItems.get(position);
+        String str = sItems.get(position);
+//        holder.tvName.setText(item.getLocationName());
+        holder.tvName.setText(str);
 //        try {
 //            String imageFile = item.getImage();
 //            InputStream inputStream = mContext.getAssets().open(imageFile);
@@ -137,7 +140,7 @@ public class CancelBookingAdapter extends RecyclerView.Adapter<CancelBookingAdap
 
     @Override
     public int getItemCount() {
-        return mItems.size();
+        return sItems.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

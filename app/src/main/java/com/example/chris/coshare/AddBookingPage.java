@@ -11,6 +11,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chris.coshare.SampleData.FastDataModel;
+import com.example.chris.coshare.SampleData.FastSampleDataProvider;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +33,25 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
     String selectedTime;
     String selectedTable;
 
+    String spinnerName;
+    int spinnerPos;
+    List<FastDataModel> dataItemList = FastSampleDataProvider.dataItemList;     //For testing
+    List<String> itemNames = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addbookingpage);
-//        String itemId = getIntent().getExtras().getString(AddBookingAdapter.ITEM_ID_KEY);     // for getting intent extras
+
+        // For testing
+        for (FastDataModel item: dataItemList) {
+            itemNames.add(item.getLocationName());
+        }
+         if (getIntent().getExtras() != null) {
+             spinnerName = getIntent().getExtras().getString(AddBookingAdapter.ITEM_ID_KEY);     // for getting intent extras
+         } else {
+             spinnerName = null;
+         }
 
         // Bind views with viewIDs
         locationText = (TextView) findViewById(R.id.textView5);
@@ -51,10 +68,13 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
 
         // Setting adapters and selectionListeners
         //TODO: Replace "R.array.DataSample" with your List
-        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.createFromResource(this, R.array.DataSample, android.R.layout.simple_spinner_item);
+//        ArrayAdapter<CharSequence> locationAdapter = ArrayAdapter.createFromResource(this, R.array.DataSample, android.R.layout.simple_spinner_item);
+        ArrayAdapter<String> locationAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,itemNames);
         locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);                 //boilerplate
         locationSpinner.setAdapter(locationAdapter);                                                                    //boilerplate
+        spinnerPos = locationAdapter.getPosition(spinnerName);
         locationSpinner.setOnItemSelectedListener(this);
+        locationSpinner.setSelection(spinnerPos);
 
         //TODO: Replace "R.array.DataSample" with your List
         ArrayAdapter<CharSequence> timeAdapter = ArrayAdapter.createFromResource(this, R.array.DataSample, android.R.layout.simple_spinner_item);
@@ -105,4 +125,6 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
     public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
+
+
 }

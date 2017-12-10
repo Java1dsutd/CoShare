@@ -33,8 +33,6 @@ public class SampleDataProvider {
         addItem(new DataModel("y8g3dfy96s", "Tampines", "blahblah",
                 "East", "tmp.png"));
 
-
-
     }
 
     private static void addItem(DataModel item){

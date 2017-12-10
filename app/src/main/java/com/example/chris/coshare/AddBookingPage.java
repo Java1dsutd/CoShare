@@ -13,8 +13,14 @@ import android.widget.Toast;
 
 import com.example.chris.coshare.SampleData.FastDataModel;
 import com.example.chris.coshare.SampleData.FastSampleDataProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class AddBookingPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -38,10 +44,36 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
     List<FastDataModel> dataItemList = FastSampleDataProvider.dataItemList;     //For testing
     List<String> itemNames = new ArrayList<>();
 
+    //Firebase backend
+    FirebaseDatabase database;
+    DatabaseReference DBrefUsers;
+    DatabaseReference DBrefLocations;
+    HashMap<ArrayList<String>,Boolean> tabledata;
+    backend be;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addbookingpage);
+
+        //Firebase
+        database = FirebaseDatabase.getInstance();
+        DBrefUsers = database.getReference().child("Locations");
+        DBrefLocations = database.getReference().child("Users");
+        tabledata=new HashMap<>();
+        be= new backend();
+
+        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tabledata=be.getEntireTable(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
         // For testing
         for (FastDataModel item: dataItemList) {

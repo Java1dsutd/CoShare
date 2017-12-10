@@ -118,13 +118,4 @@ public class backend {
         return loc;
     }
 
-    /*public String getTablesOwner(DataSnapshot dataSnapshot, String phoneNumber, String tableLocation, String tableID, String PersonalBookingStatus) {
-        String currentUser = null;
-        boolean currentStatus = (boolean) dataSnapshot.child(phoneNumber).child(tableLocation).child(tableID).child("Availability").getValue();
-        if (PersonalBookingStatus == "booked" && currentStatus == true) {
-            currentUser = dataSnapshot.child(phoneNumber).child(tableLocation).child(tableID).child("Occupant").getValue().toString();
-        }
-        return currentUser;
-
-    }*/
 }

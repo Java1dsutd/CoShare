@@ -54,10 +54,20 @@ public class Signuppage extends AppCompatActivity {
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             DatabaseReference myRef = database.getReference("Users").child(myphone);
 
-            myRef.child("Name").setValue(myname);
+
+            myRef.child("Booking Status").setValue("");
+            myRef.child("Date").setValue("");
+            myRef.child("Latest Location").setValue("");
+            myRef.child("Locations").child("Bugis").setValue("");
+            myRef.child("Locations").child("Orchard").setValue("");
+
+            myRef.child("Owner Name").setValue(myname);
             myRef.child("Email").setValue(myemail);
             myRef.child("Username").setValue(myusername);
             myRef.child("Password").setValue(mypassword);
+            myRef.child("Points").setValue(0);
+            myRef.child("Table Info").child("Location").setValue("");
+            myRef.child("Table Info").child("TableID").setValue("");
 
 
             successDialog();

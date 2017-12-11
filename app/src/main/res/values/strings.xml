@@ -5,4 +5,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="new_booking">New Booking</string>
     <string name="FullAddress">Address example</string>
+    <string name="Address_Tampines">5 Tampines Central 6, Singapore 529482</string>
+    <string name="Address_Bishan">9 Bishan Place #08-03, Junction 8 Office Tower, Singapore 579837</string>
+    <string name="Address_Bugis">230 Victoria St #05-01, Singapore 188024</string>
+    <string name="Address_Orchard">123 Orchard Highway #07-23, Singapore 987654</string>
 </resources>

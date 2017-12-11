@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -71,6 +72,7 @@ public class    AccountPage extends AppCompatActivity {
                 name=personalDetails.get(0);
                 tableLocation=personalDetails.get(1);
                 tableID=personalDetails.get(2);
+                Toast.makeText(getApplicationContext(), "" + name, Toast.LENGTH_SHORT).show();
 
                 //set user's points
                 userPoints=be.getUserPoints(dataSnapshot,phoneNumber);
@@ -127,8 +129,6 @@ public class    AccountPage extends AppCompatActivity {
                     int remainingPts = 2000 - userPts;
                     rewards.setText(remainingPts + " points \n more to claim your reward!");
                 }
-
-
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {

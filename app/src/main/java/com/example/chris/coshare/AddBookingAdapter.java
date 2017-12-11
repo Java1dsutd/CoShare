@@ -52,7 +52,7 @@ public class AddBookingAdapter extends RecyclerView.Adapter<AddBookingAdapter.Vi
         holder.mView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Toast.makeText(mContext, "Clicked data: " + item.getLocationName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(mContext, "Clicked data: " + item.getLocationName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(mContext, AddBookingPage.class);
                 String itemId = item.getTableID();
                 intent.putExtra(ITEM_ID_KEY,itemId);

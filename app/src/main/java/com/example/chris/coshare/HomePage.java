@@ -116,6 +116,7 @@ public class HomePage extends AppCompatActivity {
                         Log.i("Norman","byebye"+Occupant);
                         Log.i("Norman","hihi"+username);
 
+
                         if ((booked)) {
                             if ((occupied)) {
                                 if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied

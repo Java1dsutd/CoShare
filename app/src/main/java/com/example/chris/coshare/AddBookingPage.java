@@ -121,6 +121,9 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         dateButton = (Button) findViewById(R.id.datePicker);
         addBookingImage = (ImageView) findViewById(R.id.imageView);
 
+        //set addBookingButton to false
+        addBookingButton.setClickable(false);
+
         AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(this);
         myAlertBuilder.setTitle("Test");
         myAlertBuilder.setMessage("Test message");
@@ -216,7 +219,8 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         String day_string = Integer.toString(day);
         String year_string = Integer.toString(year);
         String dateMessage = (day_string + month_string + year_string);
-
+        addBookingButton.setClickable(true);
+        addBookingButton.setAlpha((float) 1.0);
     }
 
     // Not used. Required interface methods

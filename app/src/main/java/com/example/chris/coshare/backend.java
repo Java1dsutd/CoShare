@@ -21,12 +21,14 @@ public class backend {
     FirebaseDatabase database;
     DatabaseReference DBrefUsers;
     DatabaseReference DBrefLocations;
+    DatabaseReference DBrefAdmin;
 
 
     public backend() {
         database = FirebaseDatabase.getInstance();
         DBrefUsers = database.getReference().child("Users");
         DBrefLocations = database.getReference().child("Locations");
+        DBrefAdmin = database.getReference().child("Developer");
     }
 
     public String getName(String phoneNumber) {
@@ -42,6 +44,9 @@ public class backend {
             int locationcount = Integer.parseInt(snapshot.child("Users").child(phoneno).child("Locations").child(location).getValue().toString());//retrieve location count
             locationcount += 1; //increase by 1
             DBrefUsers.child(phoneno).child("Locations").child(location).setValue(locationcount);//update locationcount
+            int totallocationcount = Integer.parseInt(snapshot.child("Developer").child("Locations").child(location).getValue().toString());//retrieve total location count
+            totallocationcount += 1; //increase by 1
+            DBrefAdmin.child("Locations").child(location).setValue(totallocationcount);//update totallocationcount
             return true;
         } else {
             return false; //seperate function to notify user "oh no it has booked"

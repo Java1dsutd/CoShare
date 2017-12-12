@@ -38,7 +38,7 @@ import java.util.List;
  * Created by Michelle on 12/10/2017.
  */
 
-public class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class AddBookingPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner locspinner;
     Spinner tableidspinner;
     TextView dateTV;
@@ -259,20 +259,20 @@ public class Addbookingpage extends AppCompatActivity implements AdapterView.OnI
 
 
 
-                        Toast.makeText(Addbookingpage.this, "Booking Success", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(Addbookingpage.this, successFragment.class);
+                        Toast.makeText(AddBookingPage.this, "Booking Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddBookingPage.this, successFragment.class);
                         startActivity(intent);
 
                     } else {
-                        Toast.makeText(Addbookingpage.this, "Table is taken. Please select another table!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddBookingPage.this, "Table is taken. Please select another table!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
                     Log.i("in to cancel booking", "in here");
-                    Intent intent = new Intent(Addbookingpage.this, CancelBookingPage.class);
+                    Intent intent = new Intent(AddBookingPage.this, CancelBookingPage.class);
                     startActivity(intent);
 
-                    Toast.makeText(Addbookingpage.this, "Please cancel existing booking before making new booking!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddBookingPage.this, "Please cancel existing booking before making new booking!", Toast.LENGTH_SHORT).show();
                 }
 
             }

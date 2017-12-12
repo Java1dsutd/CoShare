@@ -54,7 +54,7 @@
 
         </activity>
 
-        <activity android:name=".Addbookingpage"
+        <activity android:name=".AddBookingPage"
             android:parentActivityName=".HomePage">
 
         </activity>

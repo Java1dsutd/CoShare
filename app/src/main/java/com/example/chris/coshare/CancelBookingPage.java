@@ -16,7 +16,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.example.chris.coshare.SampleData.BackEndFactory;
+import com.example.chris.coshare.SampleData.BackendWhole;
+
+
 import java.util.ArrayList;
+
 
 public class CancelBookingPage extends AppCompatActivity {
     ImageView locationPic;
@@ -30,9 +35,11 @@ public class CancelBookingPage extends AppCompatActivity {
 
     FirebaseDatabase database;
     DatabaseReference DBrefLocations;
-    DatabaseReference DBrefUsers;
-    DatabaseReference DBwhole;
     backend be;
+
+    DatabaseReference DBrefWhole;
+    BackEndFactory befwhole;
+    BackendWhole beWhole;
 
     String tableLocation;
     ArrayList<String> personalDetails;
@@ -58,13 +65,17 @@ public class CancelBookingPage extends AppCompatActivity {
 
         cancelbutton = (Button) findViewById(R.id.cancelbooking);
 
-        be=new backend();
-        DBrefLocations.addValueEventListener(new ValueEventListener() {
+        befwhole = new BackEndFactory();
+        beWhole = (BackendWhole) befwhole.getBackend("whole");
+        DBrefWhole = beWhole.initialise();
+
+        DBrefWhole.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
-                tableLocation=personalDetails.get(5);
-                date = personalDetails.get(4);
+
+                tableLocation=beWhole.getLatestLocation(dataSnapshot, phoneNumber);
+                date = beWhole.getDate(dataSnapshot, phoneNumber);
+
 
                 if (tableLocation.equals("Bugis")){
                     Log.i("in if statement" , tableLocation);
@@ -74,13 +85,6 @@ public class CancelBookingPage extends AppCompatActivity {
                     addressText.setText("230 Victoria Street 188024");
                     dateText.setText(date);
 
-
-                    cancelbutton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            cancelBooking(v);
-                        }
-                    });
                 }
 
                 else if (tableLocation.equals("Orchard")){
@@ -113,29 +117,30 @@ public class CancelBookingPage extends AppCompatActivity {
     }
 
     public void cancelBooking (View view){
-        database= FirebaseDatabase.getInstance();
-        DBwhole = database.getReference();
-        DBrefUsers = database.getReference("Users").child(phoneNumber);
-        DBrefLocations = database.getReference("Locations");
-        DBwhole.addListenerForSingleValueEvent(new ValueEventListener() {
+        befwhole = new BackEndFactory();
+        beWhole = (BackendWhole) befwhole.getBackend("whole");
+        DBrefWhole = beWhole.initialise();
+
+        DBrefWhole.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot datasnapshot) {
-                DBrefUsers.child("Date").setValue("");
+                String tableidselectedbyuser = beWhole.getBookingTableID(datasnapshot, phoneNumber);
+                String locationselectedbyuser = beWhole.getLatestLocation(datasnapshot, phoneNumber);
 
-                DBrefUsers.child("Booking Status").setValue("");
-                String tableid = datasnapshot.child("Users").child(phoneNumber).child("Latest BookingTableID").getValue().toString();
-                String location = datasnapshot.child("Users").child(phoneNumber).child("Latest Location").getValue().toString();
-                String avail = datasnapshot.child("Locations").child(location).child(tableid).child("Availability").getValue().toString();
-                if (avail.equals("false")) {
+                String availability = beWhole.getBooleanAvailability(datasnapshot, locationselectedbyuser, tableidselectedbyuser);
+                String nameofOccupant = beWhole.getName(datasnapshot, phoneNumber);
 
-                    DBrefUsers.child("Latest Location").setValue("");
-                    DBrefUsers.child("Latest BookingTableID").setValue("");
-                    
+                beWhole.setDate(phoneNumber, "");
+                beWhole.setBookingStatus(phoneNumber, "");
 
+                if (availability.equals("false")) {
+                    beWhole.setOccupantName(locationselectedbyuser, tableidselectedbyuser, nameofOccupant);
+                    beWhole.setLocationsToFalse(locationselectedbyuser, tableidselectedbyuser, true);
+                    beWhole.setBookingTableID(phoneNumber, "");
+                    beWhole.setLatestLocation(phoneNumber, "");
 
-                    DBrefLocations.child(location).child(tableid).child("Occupant").setValue("");
-                    DBrefLocations.child(location).child(tableid).child("Availability").setValue(true);
                 }
+
                 Toast.makeText(CancelBookingPage.this, "Cancelled Latest Booking", Toast.LENGTH_SHORT).show();
 
 

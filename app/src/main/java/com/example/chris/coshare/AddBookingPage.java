@@ -1,14 +1,19 @@
 package com.example.chris.coshare;
 
+
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -20,6 +25,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import com.example.chris.coshare.SampleData.BackEndFactory;
+import com.example.chris.coshare.SampleData.BackendWhole;
+
+
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -28,7 +38,7 @@ import java.util.List;
  * Created by Michelle on 12/10/2017.
  */
 
-class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner locspinner;
     Spinner tableidspinner;
     TextView dateTV;
@@ -39,26 +49,18 @@ class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSele
     FirebaseDatabase database;
     DatabaseReference DBrefLocations;
     DatabaseReference DBrefUsers;
+    DatabaseReference DBrefWhole;
 
-    backend be;
+    BackEndFactory befwhole;
+    BackendWhole beWhole;
 
-    String tableLocation;
     ArrayList<String> personalDetails;
     String phoneNumber;
-    String date;
+
 
     String locationselectedbyuser;
     String tableidselectedbyuser;
 
-//    private TextView tvDisplayDate;
-//    private DatePicker dpResult;
-//    private Button btnChangeDate;
-//
-//    private int year;
-//    private int month;
-//    private int day;
-//
-//    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,108 +141,49 @@ class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSele
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         Spinner spinner = (Spinner) parent;
-
-        database= FirebaseDatabase.getInstance();
-        DBrefUsers = database.getReference("Users").child(phoneNumber);
-
         if (spinner.getId() == R.id.location_spinner){
             Log.i("in location spinner" , "here");
             switch (position){
                 case 0:
                     bookingimg.setImageResource(R.drawable.bugis);
                     addText.setText("230 Victoria Street 188024");
-                    Toast.makeText(this, "b", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(this, "b", Toast.LENGTH_SHORT).show();
+                    locationselectedbyuser = "Bugis";
 
-//                    //
-//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot datasnapshot) {
-//                            DBrefUsers.child("Latest Location").setValue("Bugis");
-                            locationselectedbyuser = "Bugis";
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError firebaseError) {
-//                            Log.e("DEBUG", "FAILURE");
-//                        }
-//                    });
                     break;
 
 
                 case 1:
                     bookingimg.setImageResource(R.drawable.orchard);
                     addText.setText("400 Orchard Road 238875");
-                    Toast.makeText(this, "o", Toast.LENGTH_SHORT).show();
-//
-//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot datasnapshot) {
-//                            DBrefUsers.child("Latest Location").setValue("Orchard");
-                            locationselectedbyuser = "Orchard";
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError firebaseError) {
-//                            Log.e("DEBUG", "FAILURE");
-//                        }
-//                    });
+//                    Toast.makeText(this, "o", Toast.LENGTH_SHORT).show();
+
+                    locationselectedbyuser = "Orchard";
 
                     break;
                 case 2:
                     bookingimg.setImageResource(R.drawable.telepark);
                     addText.setText("5 Tampines Central 6, Singapore 529482");
-                    Toast.makeText(this, "t", Toast.LENGTH_SHORT).show();
-//
-//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot datasnapshot) {
-//                            DBrefUsers.child("Latest Location").setValue("Tampines");
-                            locationselectedbyuser = "Tampines";
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError firebaseError) {
-//                            Log.e("DEBUG", "FAILURE");
-//                        }
-//                    });
+//                    Toast.makeText(this, "Tampines", Toast.LENGTH_SHORT).show();
+
+                    locationselectedbyuser = "Tampines";
+
                     break;
-                }
+            }
 
         } else if (spinner.getId() == R.id.tableid_spinner){
             Log.i("in tableid spinner" , "here");
             switch (position){
                 case 0:
-                    Toast.makeText(this, "t1", Toast.LENGTH_SHORT).show();
-//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot datasnapshot) {
-//                            DBrefUsers.child("Latest BookingTableID").setValue("Table1001");
-                            tableidselectedbyuser = "Table1001";
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError firebaseError) {
-//                            Log.e("DEBUG", "FAILURE");
-//                        }
-//                    });
+//                    Toast.makeText(this, "t1", Toast.LENGTH_SHORT).show();
+
+                    tableidselectedbyuser = "Table1001";
 
                     break;
 
                 case 1:
-                    Toast.makeText(this, "t2", Toast.LENGTH_SHORT).show();
-//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//                        @Override
-//                        public void onDataChange(DataSnapshot datasnapshot) {
-//                            DBrefUsers.child("Latest BookingTableID").setValue("Table2001");
-                            tableidselectedbyuser = "Table2001";
-
-//                        }
-//
-//                        @Override
-//                        public void onCancelled(DatabaseError firebaseError) {
-//                            Log.e("DEBUG", "FAILURE");
-//                        }
-//                    });
+//                    Toast.makeText(this, "t2", Toast.LENGTH_SHORT).show();
+                    tableidselectedbyuser = "Table2001";
 
                     break;
 
@@ -252,34 +195,6 @@ class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSele
     public void onNothingSelected(AdapterView<?> arg0) {
         // TODO Auto-generated method stub
     }
-
-
-
-
-
-
-//        /////////////////
-//        //First Spinner//
-//        /////////////////
-//        locspinner = (Spinner) findViewById(R.id.location_spinner);
-//
-//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-//                R.array.location_array, android.R.layout.simple_spinner_item);
-//
-//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        locspinner.setAdapter(adapter);
-//
-//        //////////////////
-//        //Second Spinner//
-//        //////////////////
-//
-//        tableidspinner = (Spinner) findViewById(R.id.tableid_spinner);
-//
-//        ArrayAdapter<CharSequence> adapterID = ArrayAdapter.createFromResource(this,
-//                R.array.tableid_array, android.R.layout.simple_spinner_item);
-//
-//        adapterID.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        tableidspinner.setAdapter(adapter);
 
 
 
@@ -303,59 +218,62 @@ class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSele
 
     }
 
-    public void submitbooking (View v){
-        be = new backend();
-        DBrefLocations = database.getReference();
 
-        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+
+    public void submitbooking (View v){
+
+        befwhole = new BackEndFactory();
+        beWhole = (BackendWhole) befwhole.getBackend("whole");
+        DBrefWhole = beWhole.initialise();
+
+
+        DBrefWhole.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
-
                 String show = dataSnapshot.toString();
                 System.out.println("Is it from here?");
                 System.out.println(show);
-                String getBooleanAvailability = dataSnapshot.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").getValue().toString();
-                String ifBooked = dataSnapshot.child("Users").child(phoneNumber).child("Booking Status").getValue().toString();
-                String nameofOccupant = dataSnapshot.child("Users").child(phoneNumber).child("Owner Name").getValue().toString();
-                Log.i("boolean in submit", getBooleanAvailability);
-                Log.i("boolean in submit", ifBooked);
-                System.out.println(ifBooked);
+                Log.i("loc in submit", locationselectedbyuser);
+                Log.i("id in submit", tableidselectedbyuser);
 
-            if (!ifBooked.equals("Booked")) {
-                if (getBooleanAvailability.equals("true")) {
-                    String dateforDB = dateTV.getText().toString();
-                    //set date
-                    DBrefUsers.child("Date").setValue(dateforDB);
-                    //set booking status
-                    DBrefUsers.child("Booking Status").setValue("Booked");
-                    //set latest tableid
-                    DBrefUsers.child("Latest BookingTableID").setValue(tableidselectedbyuser);
-                    //set latest location
-                    DBrefUsers.child("Latest Location").setValue(locationselectedbyuser);
-                    //set occupant's name
-                    DBrefLocations.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Occupant").setValue(nameofOccupant);
+                String availability = beWhole.getBooleanAvailability(dataSnapshot, locationselectedbyuser, tableidselectedbyuser);
+                String userBookingStatus = beWhole.getBookingStatus(dataSnapshot, phoneNumber);
+                String nameofOccupant = beWhole.getName(dataSnapshot, phoneNumber);
 
 
+                System.out.println("avail " + availability);
+                System.out.println("status " + userBookingStatus);
+                System.out.println("occupant name " + nameofOccupant);
 
-                    //set location to false
-                    DBrefLocations.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").setValue(false);
+                if (!userBookingStatus.equals("Booked")) {
+                    if (availability.equals("true")) {
+                        String dateforDB = dateTV.getText().toString();
+                        //set date
+                        //System.out.println(dateforDB);
+                        beWhole.setDate(phoneNumber, dateforDB);
+                        beWhole.setBookingStatus(phoneNumber, "Booked");
+                        beWhole.setBookingTableID(phoneNumber,tableidselectedbyuser);
+                        beWhole.setLatestLocation(phoneNumber, locationselectedbyuser);
+                        beWhole.setOccupantName(locationselectedbyuser,tableidselectedbyuser, nameofOccupant);
+                        beWhole.setLocationsToFalse(locationselectedbyuser,tableidselectedbyuser, false);
 
 
-                    Toast.makeText(Addbookingpage.this, "Booking Success", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Addbookingpage.this, successFragment.class);
+
+                        Toast.makeText(Addbookingpage.this, "Booking Success", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(Addbookingpage.this, successFragment.class);
+                        startActivity(intent);
+
+                    } else {
+                        Toast.makeText(Addbookingpage.this, "Table is taken. Please select another table!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                else{
+                    Log.i("in to cancel booking", "in here");
+                    Intent intent = new Intent(Addbookingpage.this, CancelBookingPage.class);
                     startActivity(intent);
 
-                } else {
-                    Toast.makeText(Addbookingpage.this, "Table is taken. Please select another table!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Addbookingpage.this, "Please cancel existing booking before making new booking!", Toast.LENGTH_SHORT).show();
                 }
-            } else{
-                Log.i("in to cancel booking", "in here");
-                Intent intent = new Intent(Addbookingpage.this, CancelBookingPage.class);
-                startActivity(intent);
-
-                Toast.makeText(Addbookingpage.this, "Please cancel existing booking before making new booking!", Toast.LENGTH_SHORT).show();
-            }
 
             }
 

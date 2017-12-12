@@ -15,6 +15,10 @@ public class BackEndFactory {
         else if(dataType=="locations"){
             return new BackendLocations();
         }
+        else if (dataType == "whole"){
+            return new BackendWhole();
+        }
+
         else return null;
     }
 }

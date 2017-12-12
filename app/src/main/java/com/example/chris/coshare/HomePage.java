@@ -18,6 +18,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+
+import com.example.chris.coshare.SampleData.BackEndFactory;
+import com.example.chris.coshare.SampleData.BackendWhole;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,6 +41,10 @@ public class HomePage extends AppCompatActivity {
     TextView locationText;
 
     String location;
+
+    DatabaseReference DBrefWhole;
+    BackEndFactory befwhole;
+    BackendWhole beWhole;
 
     private FirebaseDatabase firebase;
     private DatabaseReference myRef;
@@ -204,13 +212,15 @@ public class HomePage extends AppCompatActivity {
             }
         });
 
-        be=new backend();
-        DBrefLocations.addValueEventListener(new ValueEventListener() {
+
+        befwhole = new BackEndFactory();
+        beWhole = (BackendWhole) befwhole.getBackend("whole");
+        DBrefWhole = beWhole.initialise();
+        DBrefWhole.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
-                tableLocation=personalDetails.get(5);
-                date = personalDetails.get(4);
+                tableLocation=beWhole.getLatestLocation(dataSnapshot, phoneNumber);
+                date = beWhole.getDate(dataSnapshot, phoneNumber);
 
                 if (tableLocation.equals("Bugis")){
                     Log.i("in if statement" , tableLocation);
@@ -239,10 +249,6 @@ public class HomePage extends AppCompatActivity {
 //                    location = tableLocation + " Telepark";
                     locationText.setText("No Booking Made");
                 }
-
-
-                //set location
-//                locationText.setText(tableLocation +  "\n" + date);
 
 
             }

@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chris.coshare.SampleData.BackEndFactory;
+import com.example.chris.coshare.SampleData.BackendUser;
+import com.example.chris.coshare.SampleData.data;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,10 +28,13 @@ import java.util.HashMap;
  */
 
 public class    AccountPage extends AppCompatActivity {
-    FirebaseDatabase database;
-    DatabaseReference DBrefUsers;
+   // FirebaseDatabase database;
+    //DatabaseReference DBrefUsers;
     DatabaseReference DBrefLocations;
-    backend be;
+
+    BackEndFactory bef;
+    BackendUser be;
+    //backend be;
 
     String name;
     String tableLocation;
@@ -52,8 +58,8 @@ public class    AccountPage extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         phoneNumber="83423995";
-        database= FirebaseDatabase.getInstance();
-        DBrefLocations = database.getReference().child("Users");
+     //   database= FirebaseDatabase.getInstance();
+      //  DBrefLocations = database.getReference().child("Users");
         personalDetails=new ArrayList<>();
         // location=new HashMap<>();
 
@@ -64,7 +70,12 @@ public class    AccountPage extends AppCompatActivity {
         rewards = findViewById(R.id.rewardsTV);
         claim  = findViewById(R.id.claimReward);
 
-        be=new backend();
+        bef=new BackEndFactory();
+        be=(BackendUser) bef.getBackend("users");
+        DBrefLocations=be.initialise();
+
+
+       // be=new backend();
         DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

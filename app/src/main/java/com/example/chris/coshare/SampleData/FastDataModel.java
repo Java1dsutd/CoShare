@@ -1,12 +1,16 @@
 package com.example.chris.coshare.SampleData;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.chris.coshare.AddBookingPage;
 import com.example.chris.coshare.R;
 import com.mikepenz.fastadapter.items.AbstractItem;
 
@@ -22,7 +26,6 @@ import java.util.List;
 public class FastDataModel extends AbstractItem<FastDataModel,FastDataModel.ViewHolder> {
 
     private String tableID;          //firebase UUID
-    private String locationName;
     private String description;
     private String area;
     private String image;
@@ -30,22 +33,26 @@ public class FastDataModel extends AbstractItem<FastDataModel,FastDataModel.View
     private String owner;
     private boolean currentStatus;
 
+    private List<String> myList;
+    private String locationName;
+    public static final String ITEM_ID_KEY = "item_id_key";
+
     public FastDataModel() {
 
     }
 
+    public FastDataModel(String locationName, String image) {
 
-    public FastDataModel(String tableID, String locationName, String description, String area, String image) {
-        this.tableID = tableID;
+//        this.tableID = tableID;
         this.locationName = locationName;
-        this.description = description;
-        this.area = area;
+//        this.description = description;
+//        this.area = area;
         this.image = image;
-
-        //uninitialized data
-        this.occupant = null;
-        this.owner = null;
-        this.currentStatus = false;
+//
+//        //uninitialized data
+//        this.occupant = null;
+//        this.owner = null;
+//        this.currentStatus = false;
 
     }
 
@@ -69,40 +76,49 @@ public class FastDataModel extends AbstractItem<FastDataModel,FastDataModel.View
         super.bindView(holder,list);
 
         //get the context
-        Context ctx = holder.itemView.getContext();
+        final Context ctx = holder.itemView.getContext();
 
         holder.tvName.setText(this.getLocationName());
-//        try {
-//            String imageFile = this.getImage();
-//            InputStream inputStream = ctx.getAssets().open(imageFile);
-//            Drawable d = Drawable.createFromStream(inputStream, null);
-//            holder.imageView.setImageDrawable(d);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+        try {
+            String imageFile = this.getImage();
+            InputStream inputStream = ctx.getAssets().open(imageFile);
+            Drawable d = Drawable.createFromStream(inputStream, null);
+            holder.imageView.setImageDrawable(d);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 //        holder.imageView.setImageBitmap(null);
 //        Glide.clear(holder.imageView);
 //        Glide.with(ctx).load(this.getImage()).animate(R.anim.alpha_on).into(holder.imageView);
 
+        holder.addButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Toast.makeText(ctx, "Clicked data: " + locationName, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ctx, AddBookingPage.class);
+                String itemName = locationName;
+                intent.putExtra(ITEM_ID_KEY,itemName);
+                ctx.startActivity(intent);
+            }
+        });
     }
 
     protected static class ViewHolder extends RecyclerView.ViewHolder {
         //TODO: Declare your UI widgets here
         public TextView tvName;
         public ImageView imageView;
+        public Button addButton;
         public View mView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             //TODO: init UI
-            tvName = (TextView) itemView.findViewById(R.id.itemName);
-//            imageView = (ImageView) itemView.findViewById(R.id.imageView);
+            tvName = (TextView) itemView.findViewById(R.id.locationName);
+            imageView = (ImageView) itemView.findViewById(R.id.locationImage);
+            addButton = (Button) itemView.findViewById(R.id.addLocation);
             mView = itemView;
-
         }
     }
-
-
 
     public String getTableID() {
         return tableID;

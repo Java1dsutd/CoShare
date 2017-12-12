@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chris.coshare.SampleData.FastDataModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -84,6 +85,9 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         DBrefUsers = database.getReference();
         DBrefLocations = database.getReference().child("Users");
         personalDetails=new ArrayList<>();
+
+        String viewToAddData = getIntent().getExtras().getString(FastDataModel.ITEM_ID_KEY);
+        Toast.makeText(getApplicationContext(),viewToAddData,Toast.LENGTH_SHORT).show();
 
         /////////////////
         //First Spinner//

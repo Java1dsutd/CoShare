@@ -1,39 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:weightSum="1">
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:padding="10dp"
+    android:id="@+id/relativeLayout">
 
-    <!--<ImageView-->
-    <!--android:id="@+id/imageView"-->
-    <!--android:scaleType="centerCrop"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="50dp"-->
-    <!--android:layout_weight="0.15"-->
-    <!--/>-->
-    <!--<ImageView-->
-        <!--android:id="@+id/imageView"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:adjustViewBounds="false"-->
-        <!--android:scaleType="centerCrop" />-->
-    <FrameLayout
-        android:id="@+id/item_image_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="16dp"
-        android:foreground="?selectableItemBackgroundBorderless"
-        android:orientation="vertical">
+    <ImageView
+        android:layout_width="60dp"
+        android:scaleType="fitXY"
+        android:layout_height="40dp"
+        android:id="@+id/locationImage"/>
 
-        <TextView
-            android:id="@+id/itemName"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerVertical="true"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textSize="24sp" />
-    </FrameLayout>
-</FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Location"
+        android:id="@+id/locationName"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@id/locationImage"
+        />
+
+    <Button
+        android:id="@+id/addLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:text="Add" />
+
+
+</RelativeLayout>

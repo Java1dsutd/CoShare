@@ -7,11 +7,16 @@
     tools:context="com.example.chris.coshare.ViewBookingPage">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/tablesRV"
+        android:id="@+id/viewRV"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"
         ></android.support.v7.widget.RecyclerView>
 
+    <!--<com.marshalchen.ultimaterecyclerview.UltimateRecyclerView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:id="@+id/ultimate_recycler_view"-->
+        <!--/>-->
 
 </RelativeLayout>

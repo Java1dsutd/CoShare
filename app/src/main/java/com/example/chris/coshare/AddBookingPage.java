@@ -28,7 +28,7 @@ import java.util.List;
  * Created by Michelle on 12/10/2017.
  */
 
-public class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Spinner locspinner;
     Spinner tableidspinner;
     TextView dateTV;

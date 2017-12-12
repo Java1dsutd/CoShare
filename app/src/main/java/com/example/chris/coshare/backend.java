@@ -180,4 +180,38 @@ public class backend {
         return loc;
     }
 
+    public String getRecommendation(DataSnapshot dataSnapshot, String phoneNumber,String bookedLocation){
+
+        HashMap<String,Long> loc=new HashMap();
+        String mostVisitedLocation="";
+        Long timesVisited=0L;
+        Long bookedlocationValue;
+        String notVisited="";
+        String returnMessage="";
+        Iterable<DataSnapshot> locations=dataSnapshot.child(phoneNumber).child("Locations").getChildren();
+        for(DataSnapshot dsp : locations){
+            String key=dsp.getKey().toString();
+            Log.i("check",key);
+            Long value=(Long) dsp.getValue();
+            loc.put(key,value);
+
+            mostVisitedLocation=key;
+            timesVisited=value;
+
+            if (value==0L) {
+                notVisited += ", " + key;
+            }
+        }
+        bookedlocationValue=loc.get(bookedLocation);
+        if ( bookedlocationValue==0){
+            returnMessage=" Good choice!";
+        }
+        else if(bookedLocation.equalsIgnoreCase(mostVisitedLocation)){
+            returnMessage="You have Visited "+mostVisitedLocation+" "+timesVisited+" times, how about trying something new?\n "
+            +notVisited+" are available";
+        }
+
+        return returnMessage;
+    }
+
 }

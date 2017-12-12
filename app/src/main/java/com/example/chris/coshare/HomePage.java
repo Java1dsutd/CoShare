@@ -48,8 +48,8 @@ public class HomePage extends AppCompatActivity {
 
     private String tableID;
     private String tablePlace;
-    private Boolean booked;
-    private Boolean notoccupied;
+    private Boolean available;
+    private Boolean occupied;
     private String Occupant;
     private String tableDigit;
 
@@ -108,20 +108,20 @@ public class HomePage extends AppCompatActivity {
                         //search for the table location with the 6th index of the tableID
                         tablePlace = placeID.get(tableDigit);
 
-                        notoccupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
-                        Log.i("Norman","hi"+String.valueOf(notoccupied));
-                        booked = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Availability").getValue(Boolean.class);
-                        Log.i("Norman","bye"+String.valueOf(booked));
+                        occupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
+                        Log.i("Norman","hi"+String.valueOf(occupied));
+                        available = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Availability").getValue(Boolean.class);
+                        Log.i("Norman","bye"+String.valueOf(available));
                         Occupant = dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Occupant").getValue(String.class);
                         Log.i("Norman","byebye"+Occupant);
                         Log.i("Norman","hihi"+username);
 
 
-                        if ((booked)) {
-                            if ((notoccupied)) {
+                        if ((!available)) {
+                            if ((!occupied)) {
                                 if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied
                                     Toast.makeText(getApplicationContext(), "Welcome " + Occupant, Toast.LENGTH_LONG).show();
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(false);
+                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(true);
                                     Integer currentPoint = dataSnapshot.child("Users").child(phoneNumber).child("Points").getValue(Integer.class);
                                     Integer newPoint = currentPoint + 50;
                                     myRef.child("Users").child(phoneNumber).child("Points").setValue(newPoint);
@@ -145,9 +145,9 @@ public class HomePage extends AppCompatActivity {
                             } else {
                                 if (username.equals(Occupant)) {  //if the table is booked, the table is occupied and the user matched, unbooked the user (User leaving the place)
                                     Toast.makeText(getApplicationContext(), "Thank you for using.", Toast.LENGTH_LONG).show();
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Availability").setValue(false);  //false = table is not booked
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Occupant").setValue("Empty");
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(true); // table is not occupied
+                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Availability").setValue(true);  //true = table is not booked
+                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Occupant").setValue(" ");
+                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(false); // false = table is not occupied
                                     myRef.child("Users").child(phoneNumber).child("Booking Status").setValue(" ");
                                 } else { //(User scans the wrong table)
                                     AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
@@ -164,7 +164,7 @@ public class HomePage extends AppCompatActivity {
                                 }
 
                             }
-                        } else if ((!booked)) { //if the user scan an unbook table
+                        } else if ((available)) { //if the user scan an unbook table
                             AlertDialog requestDialog = new AlertDialog.Builder(HomePage.this).create();
                             requestDialog.setTitle("Opps...");
                             requestDialog.setMessage("It seems that no one booked this table!");

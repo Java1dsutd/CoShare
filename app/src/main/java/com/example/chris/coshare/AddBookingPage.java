@@ -317,6 +317,7 @@ public class Addbookingpage extends AppCompatActivity implements AdapterView.OnI
                 System.out.println(show);
                 String getBooleanAvailability = dataSnapshot.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").getValue().toString();
                 String ifBooked = dataSnapshot.child("Users").child(phoneNumber).child("Booking Status").getValue().toString();
+                String nameofOccupant = dataSnapshot.child("Users").child(phoneNumber).child("Owner Name").getValue().toString();
                 Log.i("boolean in submit", getBooleanAvailability);
                 Log.i("boolean in submit", ifBooked);
                 System.out.println(ifBooked);
@@ -332,6 +333,10 @@ public class Addbookingpage extends AppCompatActivity implements AdapterView.OnI
                     DBrefUsers.child("Latest BookingTableID").setValue(tableidselectedbyuser);
                     //set latest location
                     DBrefUsers.child("Latest Location").setValue(locationselectedbyuser);
+                    //set occupant's name
+                    DBrefLocations.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Occupant").setValue(nameofOccupant);
+
+
 
                     //set location to false
                     DBrefLocations.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").setValue(false);

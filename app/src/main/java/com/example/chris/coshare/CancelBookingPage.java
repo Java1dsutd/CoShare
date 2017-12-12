@@ -130,7 +130,10 @@ public class CancelBookingPage extends AppCompatActivity {
 
                     DBrefUsers.child("Latest Location").setValue("");
                     DBrefUsers.child("Latest BookingTableID").setValue("");
+                    
 
+
+                    DBrefLocations.child(location).child(tableid).child("Occupant").setValue("");
                     DBrefLocations.child(location).child(tableid).child("Availability").setValue(true);
                 }
                 Toast.makeText(CancelBookingPage.this, "Cancelled Latest Booking", Toast.LENGTH_SHORT).show();

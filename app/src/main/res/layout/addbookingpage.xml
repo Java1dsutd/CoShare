@@ -63,7 +63,6 @@
             android:id="@+id/locationbookedImg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="22dp"
             android:src="@drawable/bugis" />
@@ -108,7 +107,7 @@
         android:id="@+id/tableAvailableRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
+
         android:layout_below="@+id/detailsAddressRL"
         android:layout_marginTop="16dp">
 
@@ -144,9 +143,10 @@
         android:id="@+id/selectTableSpinnerRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tableAvailableRL"
-        android:layout_marginTop="28dp">
+        android:layout_marginTop="18dp">
 
         <TextView
             android:id="@+id/selectTableIDTV"
@@ -178,15 +178,15 @@
         android:id="@+id/dateRL"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/selectTableSpinnerRL"
-        android:layout_marginTop="36dp">
+        android:layout_marginTop="24dp">
 
         <TextView
             android:id="@+id/dateTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
             android:layout_gravity="center_vertical"
             android:fontFamily="sans-serif"
@@ -206,17 +206,17 @@
 
 
         <Button
+            android:id="@+id/selectDATEPICKER"
             android:layout_width="100dp"
-            android:layout_below="@+id/dateTV"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_below="@+id/dateTV"
             android:layout_marginEnd="10dp"
             android:background="@color/colorPrimary"
             android:onClick="showDatePickerDialog"
             android:text="Select Date"
-            android:textColor="#ffffff"
-            android:id="@+id/selectDATEPICKER" />
+            android:textColor="#ffffff" />
 
 
     </RelativeLayout>
@@ -227,7 +227,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
         android:layout_marginBottom="10dp">
 
 

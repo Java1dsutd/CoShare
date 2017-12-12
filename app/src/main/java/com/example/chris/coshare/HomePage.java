@@ -295,7 +295,7 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void addBookingIntent(View v) {
-        Intent intent = new Intent(HomePage.this, Addbookingpage.class);
+        Intent intent = new Intent(HomePage.this, AddBookingPage.class);
         startActivity(intent);
     }
     public void viewBookingIntent(View v) {

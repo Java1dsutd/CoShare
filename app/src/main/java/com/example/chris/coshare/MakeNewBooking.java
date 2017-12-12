@@ -18,7 +18,7 @@ public class MakeNewBooking extends AppCompatActivity {
     }
 
     public void makenewbooking (View view){
-        Intent intent = new Intent (MakeNewBooking.this, Addbookingpage.class);
+        Intent intent = new Intent (MakeNewBooking.this, AddBookingPage.class);
         startActivity (intent);
     }
 }

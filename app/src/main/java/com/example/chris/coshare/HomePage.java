@@ -125,6 +125,9 @@ public class HomePage extends AppCompatActivity {
                                     Integer currentPoint = dataSnapshot.child("Users").child(phoneNumber).child("Points").getValue(Integer.class);
                                     Integer newPoint = currentPoint + 50;
                                     myRef.child("Users").child(phoneNumber).child("Points").setValue(newPoint);
+                                    Integer oldVisitNumber = dataSnapshot.child("Users").child(phoneNumber).child("Locations").child(tablePlace).getValue(Integer.class);
+                                    Integer newVisitNumber = oldVisitNumber + 1;
+                                    myRef.child("Users").child(phoneNumber).child("Locations").child(tablePlace).setValue(newVisitNumber);
 
                                 } else { //User scanned the wrong table
                                     AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();

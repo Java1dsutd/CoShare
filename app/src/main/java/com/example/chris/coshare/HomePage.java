@@ -108,7 +108,7 @@ public class HomePage extends AppCompatActivity {
                         //search for the table location with the 6th index of the tableID
                         tablePlace = placeID.get(tableDigit);
 
-                        occupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
+                        notoccupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
                         Log.i("Norman","hi"+String.valueOf(occupied));
                         booked = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Availability").getValue(Boolean.class);
                         Log.i("Norman","bye"+String.valueOf(booked));
@@ -118,7 +118,7 @@ public class HomePage extends AppCompatActivity {
 
 
                         if ((booked)) {
-                            if ((occupied)) {
+                            if ((notoccupied)) {
                                 if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied
                                     Toast.makeText(getApplicationContext(), "Welcome " + Occupant, Toast.LENGTH_LONG).show();
                                     myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(false);
@@ -145,6 +145,7 @@ public class HomePage extends AppCompatActivity {
                                     myRef.child("Locations").child(tablePlace).child(tableID).child("Availability").setValue(false);  //false = table is not booked
                                     myRef.child("Locations").child(tablePlace).child(tableID).child("Occupant").setValue("Empty");
                                     myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(true); // table is not occupied
+                                    myRef.child("Users").child(phoneNumber).child("Booking Status").setValue(" ");
                                 } else { //(User scans the wrong table)
                                     AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
                                     wrongDialog.setTitle("Opps...");

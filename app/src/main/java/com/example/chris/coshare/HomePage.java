@@ -49,7 +49,7 @@ public class HomePage extends AppCompatActivity {
     private String tableID;
     private String tablePlace;
     private Boolean booked;
-    private Boolean occupied;
+    private Boolean notoccupied;
     private String Occupant;
     private String tableDigit;
 
@@ -109,7 +109,7 @@ public class HomePage extends AppCompatActivity {
                         tablePlace = placeID.get(tableDigit);
 
                         notoccupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
-                        Log.i("Norman","hi"+String.valueOf(occupied));
+                        Log.i("Norman","hi"+String.valueOf(notoccupied));
                         booked = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Availability").getValue(Boolean.class);
                         Log.i("Norman","bye"+String.valueOf(booked));
                         Occupant = dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Occupant").getValue(String.class);

@@ -31,6 +31,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static com.example.chris.coshare.SampleData.FastDataModel.ITEM_ID_KEY;
+
 public class HomePage extends AppCompatActivity {
     ImageButton add;
     ImageButton cancel;
@@ -296,6 +298,8 @@ public class HomePage extends AppCompatActivity {
 
     public void addBookingIntent(View v) {
         Intent intent = new Intent(HomePage.this, AddBookingPage.class);
+        String test = "HQ";
+        intent.putExtra(ITEM_ID_KEY,test);
         startActivity(intent);
     }
     public void viewBookingIntent(View v) {

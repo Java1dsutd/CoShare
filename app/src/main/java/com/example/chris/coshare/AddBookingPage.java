@@ -62,6 +62,7 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
     String locationselectedbyuser;
     String tableidselectedbyuser;
 
+    String viewPageToAddPageData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +87,11 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         DBrefLocations = database.getReference().child("Users");
         personalDetails=new ArrayList<>();
 
-        String viewToAddData = getIntent().getExtras().getString(FastDataModel.ITEM_ID_KEY);
-        Toast.makeText(getApplicationContext(),viewToAddData,Toast.LENGTH_SHORT).show();
+
+        if(getIntent() != null){
+            viewPageToAddPageData = getIntent().getExtras().getString(FastDataModel.ITEM_ID_KEY);
+//        Toast.makeText(getApplicationContext(),viewToAddData,Toast.LENGTH_SHORT).show();
+        }
 
         /////////////////
         //First Spinner//

@@ -26,8 +26,6 @@ public class CameraActivity extends AppCompatActivity {
     private CameraSource cameraSource;
     private BarcodeDetector barcodeDetector;
 
-    private TextView Result;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +33,6 @@ public class CameraActivity extends AppCompatActivity {
 
         cameraPreview = (SurfaceView) findViewById(R.id.preview);
 
-        Result = (TextView) findViewById(R.id.result);
 
         createCameraSource();
     }
@@ -99,7 +96,6 @@ public class CameraActivity extends AppCompatActivity {
                         if (qrcodes.size() > 0) {
 
                             //pass the data received, in this case, tableID, to another intent to do analysis
-                            Result.setText(qrcodes.valueAt(0).displayValue);
                             Log.i("Norman",qrcodes.valueAt(0).displayValue);
 
                             Intent intent = new Intent(CameraActivity.this, HomePage.class);

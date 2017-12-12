@@ -51,7 +51,7 @@ public class LoginPage extends AppCompatActivity {
         phoneNumber="83423995";
         database= FirebaseDatabase.getInstance();
         DBrefUsers = database.getReference("Users").child(phoneNumber);
-        DBrefUsers.addValueEventListener(new ValueEventListener() {
+        DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot datasnapshot) {
                 usernameDB = datasnapshot.child("Username").getValue().toString();

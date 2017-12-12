@@ -1,231 +1,365 @@
 package com.example.chris.coshare;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
+import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
 
-import com.example.chris.coshare.SampleData.FastDataModel;
-import com.example.chris.coshare.SampleData.FastSampleDataProvider;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Calendar;
 import java.util.List;
 
-public class AddBookingPage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+/**
+ * Created by Michelle on 12/10/2017.
+ */
 
-    // Declare widgets
-    TextView locationText;
-    TextView noOfTableText;
-    Spinner locationSpinner;
-    Spinner tableSpinner;
-    Button dateButton;
-    Button addBookingButton;
-    ImageView addBookingImage;
-    AlertDialog alertDialog;
+public class Addbookingpage extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    Spinner locspinner;
+    Spinner tableidspinner;
+    TextView dateTV;
+    ImageView bookingimg;
+    TextView addText;
 
-    // Declare this form's variables
-    String selectedLocation;
-    String selectedTable;
-    String imageFile;
-    String addrFile;
 
-    String spinnerName;
-    int spinnerPos;
-    List<FastDataModel> dataItemList = FastSampleDataProvider.dataItemList;     //For testing
-    List<String> itemNames = new ArrayList<>();
-
-    //Firebase backend
     FirebaseDatabase database;
-    DatabaseReference DBrefUsers;
     DatabaseReference DBrefLocations;
-    DatabaseReference DBref;
-    HashMap<ArrayList<String>,Boolean> tabledata = new HashMap<>();
-    List<String> dataDbLocation;
-    List<String> dataDbTable;
+    DatabaseReference DBrefUsers;
+
     backend be;
+
+    String tableLocation;
+    ArrayList<String> personalDetails;
+    String phoneNumber;
+    String date;
+
+    String locationselectedbyuser;
+    String tableidselectedbyuser;
+
+//    private TextView tvDisplayDate;
+//    private DatePicker dpResult;
+//    private Button btnChangeDate;
+//
+//    private int year;
+//    private int month;
+//    private int day;
+//
+//    static final int DATE_DIALOG_ID = 999;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addbookingpage);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //Firebase
-        database = FirebaseDatabase.getInstance();
-        DBref = database.getReference();
-        DBrefUsers = database.getReference().child("Users");
-        DBrefLocations = database.getReference().child("Locations");
-//        tabledata=new HashMap<>();
-        be= new backend();
-        dataDbTable = new ArrayList<>();
+
+        dateTV = (TextView) findViewById(R.id.displayDate);
+        bookingimg = (ImageView) findViewById(R.id.locationbookedImg);
+        addText = (TextView) findViewById(R.id.addressFetch);
+
+
+        ////////////
+        //Firebase//
+        ////////////
+
+        phoneNumber="83423995";
+        database= FirebaseDatabase.getInstance();
+
+        DBrefUsers = database.getReference();
+        DBrefLocations = database.getReference().child("Users");
+        personalDetails=new ArrayList<>();
+
+        /////////////////
+        //First Spinner//
+        /////////////////
+
+        // Spinner element
+        locspinner = (Spinner) findViewById(R.id.location_spinner);
+
+        // Spinner click listener
+        locspinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("Bugis Junction Tower");
+        categories.add("Orchard Tower");
+        categories.add("Tampines Telepark");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        locspinner.setAdapter(dataAdapter);
+
+
+
+        //////////////////
+        //Second Spinner//
+        //////////////////
+
+        tableidspinner = (Spinner) findViewById(R.id.tableid_spinner);
+
+        // Spinner click listener
+        tableidspinner.setOnItemSelectedListener(this);
+
+        // Spinner Drop down elements
+        List<String> tableid = new ArrayList<String>();
+        tableid.add("Table 1001");
+        tableid.add("Table 2001");
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapterID = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tableid);
+
+        // Drop down layout style - list view with radio button
+        dataAdapterID.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        tableidspinner.setAdapter(dataAdapterID);
+
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        Spinner spinner = (Spinner) parent;
+
+        database= FirebaseDatabase.getInstance();
+        DBrefUsers = database.getReference("Users").child(phoneNumber);
+
+        if (spinner.getId() == R.id.location_spinner){
+            Log.i("in location spinner" , "here");
+            switch (position){
+                case 0:
+                    bookingimg.setImageResource(R.drawable.bugis);
+                    addText.setText("230 Victoria Street 188024");
+                    Toast.makeText(this, "b", Toast.LENGTH_SHORT).show();
+
+//                    //
+//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot datasnapshot) {
+//                            DBrefUsers.child("Latest Location").setValue("Bugis");
+                            locationselectedbyuser = "Bugis";
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError firebaseError) {
+//                            Log.e("DEBUG", "FAILURE");
+//                        }
+//                    });
+                    break;
+
+
+                case 1:
+                    bookingimg.setImageResource(R.drawable.orchard);
+                    addText.setText("400 Orchard Road 238875");
+                    Toast.makeText(this, "o", Toast.LENGTH_SHORT).show();
+//
+//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot datasnapshot) {
+//                            DBrefUsers.child("Latest Location").setValue("Orchard");
+                            locationselectedbyuser = "Orchard";
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError firebaseError) {
+//                            Log.e("DEBUG", "FAILURE");
+//                        }
+//                    });
+
+                    break;
+                case 2:
+                    bookingimg.setImageResource(R.drawable.telepark);
+                    addText.setText("5 Tampines Central 6, Singapore 529482");
+                    Toast.makeText(this, "t", Toast.LENGTH_SHORT).show();
+//
+//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot datasnapshot) {
+//                            DBrefUsers.child("Latest Location").setValue("Tampines");
+                            locationselectedbyuser = "Tampines";
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError firebaseError) {
+//                            Log.e("DEBUG", "FAILURE");
+//                        }
+//                    });
+                    break;
+                }
+
+        } else if (spinner.getId() == R.id.tableid_spinner){
+            Log.i("in tableid spinner" , "here");
+            switch (position){
+                case 0:
+                    Toast.makeText(this, "t1", Toast.LENGTH_SHORT).show();
+//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot datasnapshot) {
+//                            DBrefUsers.child("Latest BookingTableID").setValue("Table1001");
+                            tableidselectedbyuser = "Table1001";
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError firebaseError) {
+//                            Log.e("DEBUG", "FAILURE");
+//                        }
+//                    });
+
+                    break;
+
+                case 1:
+                    Toast.makeText(this, "t2", Toast.LENGTH_SHORT).show();
+//                    DBrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(DataSnapshot datasnapshot) {
+//                            DBrefUsers.child("Latest BookingTableID").setValue("Table2001");
+                            tableidselectedbyuser = "Table2001";
+
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(DatabaseError firebaseError) {
+//                            Log.e("DEBUG", "FAILURE");
+//                        }
+//                    });
+
+                    break;
+
+
+            }
+
+        }
+    }
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
+    }
+
+
+
+
+
+
+//        /////////////////
+//        //First Spinner//
+//        /////////////////
+//        locspinner = (Spinner) findViewById(R.id.location_spinner);
+//
+//        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+//                R.array.location_array, android.R.layout.simple_spinner_item);
+//
+//        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        locspinner.setAdapter(adapter);
+//
+//        //////////////////
+//        //Second Spinner//
+//        //////////////////
+//
+//        tableidspinner = (Spinner) findViewById(R.id.tableid_spinner);
+//
+//        ArrayAdapter<CharSequence> adapterID = ArrayAdapter.createFromResource(this,
+//                R.array.tableid_array, android.R.layout.simple_spinner_item);
+//
+//        adapterID.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        tableidspinner.setAdapter(adapter);
+
+
+
+    public void showDatePickerDialog(View v) {
+
+        final Calendar calendar = Calendar.getInstance();
+        int yy = calendar.get(Calendar.YEAR);
+        int mm = calendar.get(Calendar.MONTH);
+        int dd = calendar.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                String date =  String.valueOf(dayOfMonth) +"-"+String.valueOf(monthOfYear)
+                        +"-"+String.valueOf(year);
+                dateTV.setText(date);
+
+
+            }
+        }, yy, mm, dd);
+        datePicker.show();
+
+    }
+
+    public void submitbooking (View v){
+        be = new backend();
+        DBrefLocations = database.getReference();
 
         DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                tabledata=be.getEntireTable(dataSnapshot);
-//                Toast.makeText(getApplicationContext(), "" + tabledata, Toast.LENGTH_SHORT).show();
-                for(ArrayList<String> arr:tabledata.keySet()){
-                    if (tabledata.get(arr)!=null) {         //prevent errors
-                        if (tabledata.get(arr)) {
-                            dataDbTable.add(arr.get(1));
-                        }
-                    }
+
+
+                String show = dataSnapshot.toString();
+                System.out.println("Is it from here?");
+                System.out.println(show);
+                String getBooleanAvailability = dataSnapshot.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").getValue().toString();
+                String ifBooked = dataSnapshot.child("Users").child(phoneNumber).child("Booking Status").getValue().toString();
+                Log.i("boolean in submit", getBooleanAvailability);
+                Log.i("boolean in submit", ifBooked);
+                System.out.println(ifBooked);
+
+            if (!ifBooked.equals("Booked")) {
+                if (getBooleanAvailability.equals("true")) {
+                    String dateforDB = dateTV.getText().toString();
+                    //set date
+                    DBrefUsers.child("Date").setValue(dateforDB);
+                    //set booking status
+                    DBrefUsers.child("Booking Status").setValue("Booked");
+                    //set latest tableid
+                    DBrefUsers.child("Latest BookingTableID").setValue(tableidselectedbyuser);
+                    //set latest location
+                    DBrefUsers.child("Latest Location").setValue(locationselectedbyuser);
+
+                    //set location to false
+                    DBrefLocations.child("Locations").child(locationselectedbyuser).child(tableidselectedbyuser).child("Availability").setValue(false);
+
+
+                    Toast.makeText(Addbookingpage.this, "Booking Success", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Addbookingpage.this, successFragment.class);
+                    startActivity(intent);
+
+                } else {
+                    Toast.makeText(Addbookingpage.this, "Table is taken. Please select another table!", Toast.LENGTH_SHORT).show();
                 }
-                dataDbLocation = be.getDbLocation(dataSnapshot);        //Get Locations only
-                //dataDbTable = be.getDbTable(dataSnapshot);
+            } else{
+                Log.i("in to cancel booking", "in here");
+                Intent intent = new Intent(Addbookingpage.this, CancelBookingPage.class);
+                startActivity(intent);
 
-                ArrayAdapter<String> locationAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dataDbLocation);
-                locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);                 //boilerplate
-                locationSpinner.setAdapter(locationAdapter);                                                                    //boilerplate
-                locationSpinner.setOnItemSelectedListener(AddBookingPage.this);
-
-                ArrayAdapter<String> tableAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dataDbTable);
-                tableAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                tableSpinner.setAdapter(tableAdapter);
-                tableSpinner.setOnItemSelectedListener(AddBookingPage.this);
-
-                noOfTableText.setText(Integer.toString(dataDbTable.size()));
+                Toast.makeText(Addbookingpage.this, "Please cancel existing booking before making new booking!", Toast.LENGTH_SHORT).show();
+            }
 
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        // Bind views with viewIDs
-        locationText = (TextView) findViewById(R.id.textView5);
-        locationSpinner = (Spinner) findViewById(R.id.spinner);
-        noOfTableText = (TextView) findViewById(R.id.noOfTableText);
-        tableSpinner = (Spinner) findViewById(R.id.spinnerTable);
-        addBookingButton = (Button) findViewById(R.id.AddBookingButton);
-        dateButton = (Button) findViewById(R.id.datePicker);
-        addBookingImage = (ImageView) findViewById(R.id.imageView);
-
-        //set addBookingButton to false
-        addBookingButton.setClickable(false);
-
-        AlertDialog.Builder myAlertBuilder = new AlertDialog.Builder(this);
-        myAlertBuilder.setTitle("Test");
-        myAlertBuilder.setMessage("Test message");
-        myAlertBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_SHORT);
-            }
-        });
-        alertDialog = myAlertBuilder.create();
-    } //end of onCreate()
-
-    // Submit button callback
-    public void onAddBooking(View view) {
-        DBref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (be.Book(dataSnapshot,selectedLocation,selectedTable,"83423995")) {
-                    //TODO: Implement booking with date (see also line 214)
-                    Toast.makeText(getApplicationContext(), "Booking success: " , Toast.LENGTH_SHORT).show();
-                    alertDialog.show();
-                };
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
+            public void onCancelled(DatabaseError firebaseError) {
+                Log.e("DEBUG", "FAILURE");
             }
         });
     }
 
-    // Spinner selection callback
-    @Override
-    public void onItemSelected(AdapterView<?> parent, View view, int i, long l) {
-        // Locate spinner
-        switch (parent.getId()){
-            // Extract value from location spinner
-            case R.id.spinner:
-                selectedLocation = parent.getItemAtPosition(i).toString();
-                Toast.makeText(this, "Location selected: " + parent.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
-                switch (selectedLocation) {
-                    case "Bugis":
-                        imageFile = "bgs.png";
-                        locationText.setText(R.string.Address_Bugis);
-                        break;
-                    case "Orchard":
-                        imageFile = "stc.png";
-                        locationText.setText(R.string.Address_Orchard);
-                        break;
-                    case "Tampines":
-                        imageFile = "tmp.png";
-                        locationText.setText(R.string.Address_Tampines);
-                        break;
-                    case "Bishan":
-                        imageFile = "bsh.png";
-                        locationText.setText(R.string.Address_Bishan);
-                        break;
-                    case "Ang Mo Kio":
-                        imageFile = "amk.png";
-                        locationText.setText(R.string.FullAddress);
-                    case "Rochor":
-                        imageFile = "rcr.png";
-                        locationText.setText(R.string.FullAddress);
-                    default:
-                        imageFile = "tmp.png";
-                        locationText.setText(R.string.Address_Tampines);
-                        break;
-                }
-                try {
-                    InputStream inputStream = view.getContext().getAssets().open(imageFile);
-                    Drawable d = Drawable.createFromStream(inputStream, null);
-                    addBookingImage.setImageDrawable(d);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                break;
 
-            // Extract value from table spinner
-            case R.id.spinnerTable:
-                selectedTable = parent.getSelectedItem().toString();
-                Toast.makeText(this, "Table Selected: " + parent.getItemAtPosition(i), Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
-
-    // Datepicker function
-    public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
-    }
-
-    // Datepicker callback
-    public void processDatePickerResult(int year, int month, int day) {
-        String month_string = Integer.toString(month+1);
-        String day_string = Integer.toString(day);
-        String year_string = Integer.toString(year);
-        String dateMessage = (day_string + month_string + year_string);
-        addBookingButton.setClickable(true);
-        addBookingButton.setAlpha((float) 1.0);
-    }
-
-    // Not used. Required interface methods
-    @Override
-    public void onNothingSelected(AdapterView<?> adapterView) {
-
-    }
 }

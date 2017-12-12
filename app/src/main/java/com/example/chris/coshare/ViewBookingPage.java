@@ -20,9 +20,9 @@ public class ViewBookingPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewbookingpage);
 
-        AddBookingAdapter adapter = new AddBookingAdapter(this, dataItemList);
-
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.tablesRV);
-        recyclerView.setAdapter(adapter);
+//        AddBookingAdapter adapter = new AddBookingAdapter(this, dataItemList);
+//
+//        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.tablesRV);
+//        recyclerView.setAdapter(adapter);
     }
 }

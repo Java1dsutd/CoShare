@@ -1,36 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="8dp"
-    tools:context="com.example.chris.coshare.CancelBookingPage">
+    android:orientation="vertical"
+    android:id="@+id/cancelPage"
+    tools:context="com.michelle.coshare.CancelBookingPage">
+
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/latestbookingText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:padding="4dp"
-        android:text="Cancel Booking"
+        android:layout_gravity="center_vertical"
+        android:fontFamily="sans-serif"
+        android:padding="10dp"
+        android:text="Latest Booking"
         android:textAlignment="center"
-        android:textSize="24sp" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cancelRV"
+    <ImageView
+        android:id="@+id/locationbookedImg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/bugis" />
+
+    <TextView
+        android:id="@+id/locationBookedTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif"
+        android:text="Location:"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp" />
+
+
+    <TextView
+        android:id="@+id/locationFetch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif"
+        android:text="Fetch from DB"
+        android:textColor="#000000"
+        android:padding="5dp"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/addressTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif"
+        android:text="Address:"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp" />
+
+
+    <TextView
+        android:id="@+id/addressFetch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif"
+        android:padding="5dp"
+        android:text="Fetch from App"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/dateTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:padding="5dp"
+        android:fontFamily="sans-serif"
+        android:text="Date:"
+        android:textColor="@color/colorPrimary"
+        android:textSize="25sp" />
+
+
+    <TextView
+        android:id="@+id/dateFetch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:fontFamily="sans-serif"
+        android:text="Fetch from DB"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        app:layoutManager="LinearLayoutManager"
-        android:layout_below="@+id/textView3" />
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recyclerview"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
-    <!--</android.support.v7.widget.RecyclerView>-->
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
 
-</RelativeLayout>
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/GridRewards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/gap"
+            android:layout_gravity="center_vertical"
+            android:alignmentMode="alignBounds"
+            android:background="#7c0e23"
+            android:columnCount="2"
+            android:orientation="horizontal"
+            android:rowCount="1"
+            tools:context=".GridXMLActivity">
+
+            <Button
+                android:id="@+id/cancelbooking"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_columnWeight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:background="#7c0e23"
+                android:onClick="cancelBooking"
+                android:text="Cancel Booking"
+                android:textAlignment="center"
+                android:textColor="#ffffff"
+                android:textSize="25sp" />
+
+
+            <ImageView
+                android:id="@+id/lockicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_columnWeight="0.1"
+                android:layout_gravity="fill"
+                android:layout_row="0"
+                android:layout_rowWeight="1"
+                android:padding="10dp"
+                android:src="@drawable/delete" />
+
+        </GridLayout>
+    </LinearLayout>
+
+
+
+</LinearLayout>

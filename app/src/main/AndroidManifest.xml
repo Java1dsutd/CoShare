@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/coshareappicon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/coshareappicon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".LoginPage">
@@ -45,9 +45,28 @@
         <activity android:name=".Signuppage" />
         <activity android:name=".fragmentActivity" />
         <activity android:name=".ViewBookingPage" />
-        <activity android:name=".AddBookingPage" />
-        <activity android:name=".CancelBookingPage" />
-        <activity android:name=".CameraActivity"></activity>
+        <activity android:name=".CameraActivity"
+            android:parentActivityName=".HomePage">
+
+        </activity>
+        <activity android:name=".CancelBookingPage"
+            android:parentActivityName=".HomePage">
+
+        </activity>
+
+        <activity android:name=".Addbookingpage"
+            android:parentActivityName=".HomePage">
+
+        </activity>
+        <activity android:name=".MakeNewBooking"
+            android:parentActivityName=".HomePage">
+
+        </activity>
+
+        <activity android:name=".successFragment"
+            android:parentActivityName=".HomePage">
+
+        </activity>
     </application>
 
 </manifest>

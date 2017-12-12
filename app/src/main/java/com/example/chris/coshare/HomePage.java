@@ -201,13 +201,12 @@ public class HomePage extends AppCompatActivity {
         });
 
         be=new backend();
-        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+        DBrefLocations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
                 tableLocation=personalDetails.get(5);
                 date = personalDetails.get(4);
-
 
                 if (tableLocation.equals("Bugis")){
                     Log.i("in if statement" , tableLocation);
@@ -218,11 +217,28 @@ public class HomePage extends AppCompatActivity {
 
                 else if (tableLocation.equals("Orchard")){
                     locationPic.setImageResource(R.drawable.orchard);
+                    Log.i("in if statement" , tableLocation);
                     location = tableLocation + " Tower";
+                    locationText.setText(location +  "\n" + date);
+
+                }
+                else if (tableLocation.equals("Tampines")){
+                    locationPic.setImageResource(R.drawable.telepark);
+                    Log.i("in if statement" , tableLocation);
+                    location = tableLocation + " Telepark";
                     locationText.setText(location +  "\n" + date);
                 }
 
+                else if (tableLocation.equals("")){
+                    locationPic.setImageResource(R.drawable.sad);
+//                    Log.i("in if statement" , tableLocation);
+//                    location = tableLocation + " Telepark";
+                    locationText.setText("No Booking Made");
+                }
 
+
+                //set location
+//                locationText.setText(tableLocation +  "\n" + date);
 
 
             }
@@ -232,7 +248,6 @@ public class HomePage extends AppCompatActivity {
 
             }
         });
-
 
 
 
@@ -270,16 +285,40 @@ public class HomePage extends AppCompatActivity {
     }
 
     public void addBookingIntent(View v) {
-        Intent intent = new Intent(HomePage.this, AddBookingPage.class);
+        Intent intent = new Intent(HomePage.this, Addbookingpage.class);
         startActivity(intent);
     }
     public void viewBookingIntent(View v) {
         Intent intent = new Intent(HomePage.this, ViewBookingPage.class);
         startActivity(intent);
     }
-    public void cancelBookingIntent(View v) {
-        Intent intent = new Intent(HomePage.this, CancelBookingPage.class);
-        startActivity(intent);
+    public void cancelBookingIntent(View view){
+
+        be=new backend();
+        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                personalDetails=be.getPersonalData(dataSnapshot,phoneNumber);
+                tableLocation=personalDetails.get(5);
+                date = personalDetails.get(4);
+
+                if (tableLocation.equals("")) {
+                    Intent intent = new Intent (HomePage.this, MakeNewBooking.class);
+                    startActivity(intent);
+                }
+                else {
+                    Intent intent = new Intent (HomePage.this, CancelBookingPage.class);
+                    startActivity(intent);
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

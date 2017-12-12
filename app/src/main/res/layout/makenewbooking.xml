@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.chris.coshare.MakeNewBooking">
+
+
+    <TextView
+        android:id="@+id/makenewbookingTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_above="@+id/locationbookedImg"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="43dp"
+        android:fontFamily="sans-serif"
+        android:padding="15dp"
+        android:text="Make New Booking?"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
+
+
+    <ImageButton
+        android:id="@+id/addnewbooking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:background="@null"
+        android:onClick="makenewbooking"
+        android:src="@drawable/plus" />
+
+
+</RelativeLayout>

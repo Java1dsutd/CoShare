@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context="com.example.anotherfrag.MainActivity">
+    tools:context="com.example.chris.coshare.successFragment">
 
     <!-- TODO: Update which fragment to trigger -->
 

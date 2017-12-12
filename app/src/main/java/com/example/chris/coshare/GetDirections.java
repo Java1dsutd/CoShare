@@ -80,6 +80,22 @@ public class GetDirections extends AppCompatActivity {
                     googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 }
+
+                else if (s.equals("Tampines Telepark")){
+                    googleMap = mMap;
+
+                    // For showing a move to my location button
+                    //googleMap.setMyLocationEnabled(true);
+
+                    // For dropping a marker at a point on the Map
+                    LatLng sg = new LatLng(1.353465, 103.942097);
+                    marker = googleMap.addMarker(new MarkerOptions().position(sg).title("Tampines Telepark").snippet("5 Tampines Central 6, Singapore 529482"));
+
+                    // For zooming automatically to the location of the marker
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(sg).zoom(18).build();
+                    googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                }
             }
         });
 

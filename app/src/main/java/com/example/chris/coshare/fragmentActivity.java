@@ -12,11 +12,11 @@ public class fragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fragment);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        successFragment fragment = new successFragment();
-        fragmentTransaction.add(R.id.don,fragment);
-        fragmentTransaction.commit();
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        successFragment fragment = new successFragment();
+//        fragmentTransaction.add(R.id.don,fragment);
+//        fragmentTransaction.commit();
     }
 }

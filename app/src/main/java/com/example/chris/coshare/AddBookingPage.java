@@ -4,6 +4,7 @@ package com.example.chris.coshare;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.chris.coshare.SampleData.BackendLocations;
 import com.example.chris.coshare.SampleData.FastDataModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,9 +32,11 @@ import com.example.chris.coshare.SampleData.BackEndFactory;
 import com.example.chris.coshare.SampleData.BackendWhole;
 
 
-
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -54,6 +58,7 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
 
     BackEndFactory befwhole;
     BackendWhole beWhole;
+    BackendLocations beLocations;
 
     ArrayList<String> personalDetails;
     String phoneNumber;
@@ -63,6 +68,9 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
     String tableidselectedbyuser;
 
     String viewPageToAddPageData;
+    HashMap<ArrayList<String>,Boolean> tabledata = new HashMap<>();
+    List<String> dataDbLocation = new ArrayList<>();
+    List<String> dataDbTable = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,16 +78,24 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         setContentView(R.layout.addbookingpage);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if(getIntent() != null){
+            viewPageToAddPageData = getIntent().getExtras().getString(FastDataModel.ITEM_ID_KEY);
+//        Toast.makeText(getApplicationContext(),viewToAddData,Toast.LENGTH_SHORT).show();
+        }
 
+        // Bind Views
         dateTV = (TextView) findViewById(R.id.displayDate);
         bookingimg = (ImageView) findViewById(R.id.locationbookedImg);
         addText = (TextView) findViewById(R.id.addressFetch);
 
+        locspinner = (Spinner) findViewById(R.id.location_spinner);
+        tableidspinner = (Spinner) findViewById(R.id.tableid_spinner);
 
         ////////////
         //Firebase//
         ////////////
 
+        // Firebase instantiations
         phoneNumber="83423995";
         database= FirebaseDatabase.getInstance();
 
@@ -87,62 +103,48 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         DBrefLocations = database.getReference().child("Users");
         personalDetails=new ArrayList<>();
 
-
-        if(getIntent() != null){
-            viewPageToAddPageData = getIntent().getExtras().getString(FastDataModel.ITEM_ID_KEY);
-//        Toast.makeText(getApplicationContext(),viewToAddData,Toast.LENGTH_SHORT).show();
-        }
-
         /////////////////
-        //First Spinner//
+        // Spinner //////
         /////////////////
 
-        // Spinner element
-        locspinner = (Spinner) findViewById(R.id.location_spinner);
+        beLocations = new BackendLocations();
+        beLocations = (BackendLocations) befwhole.getBackend("locations");
+        DBrefLocations = beLocations.initialise();
 
-        // Spinner click listener
-        locspinner.setOnItemSelectedListener(this);
+        DBrefLocations.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                tabledata=beLocations.getEntireTable(dataSnapshot);
+//                Toast.makeText(getApplicationContext(), "" + tabledata, Toast.LENGTH_SHORT).show();
+                for(ArrayList<String> arr:tabledata.keySet()){
+                    if (tabledata.get(arr)!=null) {         //prevent errors
+                        if (tabledata.get(arr)) {
+                            dataDbTable.add(arr.get(1));
+                        }
+                    }
+                }
+                dataDbLocation = beLocations.getDbLocation(dataSnapshot);        //Get Locations only
+                //dataDbTable = be.getDbTable(dataSnapshot);
 
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-        categories.add("Bugis Junction Tower");
-        categories.add("Orchard Tower");
-        categories.add("Tampines Telepark");
+                ArrayAdapter<String> locationAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dataDbLocation);
+                locationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);                 //boilerplate
+                locspinner.setAdapter(locationAdapter);                                                                    //boilerplate
+                locspinner.setOnItemSelectedListener(AddBookingPage.this);
 
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
+                ArrayAdapter<String> tableAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, dataDbTable);
+                tableAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                tableidspinner.setAdapter(tableAdapter);
+                tableidspinner.setOnItemSelectedListener(AddBookingPage.this);
 
-        // Drop down layout style - list view with radio button
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//                noOfTableText.setText(Integer.toString(dataDbTable.size()));
 
-        // attaching data adapter to spinner
-        locspinner.setAdapter(dataAdapter);
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-
-        //////////////////
-        //Second Spinner//
-        //////////////////
-
-        tableidspinner = (Spinner) findViewById(R.id.tableid_spinner);
-
-        // Spinner click listener
-        tableidspinner.setOnItemSelectedListener(this);
-
-        // Spinner Drop down elements
-        List<String> tableid = new ArrayList<String>();
-        tableid.add("Table 1001");
-        tableid.add("Table 2001");
-
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapterID = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, tableid);
-
-        // Drop down layout style - list view with radio button
-        dataAdapterID.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
-        tableidspinner.setAdapter(dataAdapterID);
-
+            }
+        });
 
     }
 
@@ -151,17 +153,24 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
         Spinner spinner = (Spinner) parent;
         if (spinner.getId() == R.id.location_spinner){
             Log.i("in location spinner" , "here");
-            switch (position){
-                case 0:
+            String selectedLocation = parent.getItemAtPosition(position).toString();
+            String s = 
+            switch (selectedLocation){      //TODO: change hard code switch-case to for-loop check with dataDbLocation
+                case "Ang Mo Kio":
+
+                    addText.setText("230 Victoria Street 188024");
+//                    Toast.makeText(this, "b", Toast.LENGTH_SHORT).show();
+                    locationselectedbyuser = "Bugis";
+                    break;
+
+                case "Bugis":
                     bookingimg.setImageResource(R.drawable.bugis);
                     addText.setText("230 Victoria Street 188024");
 //                    Toast.makeText(this, "b", Toast.LENGTH_SHORT).show();
                     locationselectedbyuser = "Bugis";
-
                     break;
 
-
-                case 1:
+                case "Orchard":
                     bookingimg.setImageResource(R.drawable.orchard);
                     addText.setText("400 Orchard Road 238875");
 //                    Toast.makeText(this, "o", Toast.LENGTH_SHORT).show();
@@ -198,6 +207,13 @@ public class AddBookingPage extends AppCompatActivity implements AdapterView.OnI
 
             }
 
+        }
+        try {
+            InputStream inputStream = view.getContext().getAssets().open(imageFile);
+            Drawable d = Drawable.createFromStream(inputStream, null);
+            addBookingImage.setImageDrawable(d);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
     public void onNothingSelected(AdapterView<?> arg0) {

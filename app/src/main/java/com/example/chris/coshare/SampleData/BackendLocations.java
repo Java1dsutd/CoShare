@@ -24,8 +24,20 @@ public class BackendLocations implements data {
         return DBrefLocations;
     }
 
-    public HashMap<ArrayList<String>,Boolean> getEntireTable(DataSnapshot dataSnapshot) {
-        HashMap<ArrayList<String>,Boolean> entiretable = new HashMap();
+    public class tableData{
+        public Boolean availability;
+        public Boolean currentStatus;
+        public String occupant;
+
+        public tableData(Boolean availability, Boolean currentStatus, String occupant){
+            this.availability = availability;
+            this.currentStatus = currentStatus;
+            this.occupant = occupant;
+        }
+    }
+
+    public HashMap<ArrayList<String>,tableData> getEntireTable(DataSnapshot dataSnapshot) {
+        HashMap<ArrayList<String>,tableData> entiretable = new HashMap();
         Iterable<DataSnapshot> locations = dataSnapshot.getChildren();
         for(DataSnapshot location:locations){
             String key1 = location.getKey().toString();
@@ -35,8 +47,15 @@ public class BackendLocations implements data {
                 ArrayList key = new ArrayList<String>();
                 key.add(key1); //locations
                 key.add(key2); //table number
-                Boolean value = (Boolean) table.child("Availability").getValue(); //status of the table number
-                entiretable.put(key,value);
+
+                //get information of the table
+                Boolean value1 = (Boolean) table.child("Availability").getValue(Boolean.class);//status of the table number
+                Boolean value2 = (Boolean) table.child("Current Status").getValue(Boolean.class);
+                String value3 = (String)table.child("Occupant").getValue(String.class);
+
+                tableData Data = new tableData(value1,value2,value3);
+
+                entiretable.put(key,Data);
             }
         }
 //        for (ArrayList<String> name: entiretable.keySet()){

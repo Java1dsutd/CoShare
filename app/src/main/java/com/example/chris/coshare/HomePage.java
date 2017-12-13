@@ -56,12 +56,25 @@ public class HomePage extends AppCompatActivity {
     private HashMap<String,String> placeID;
 
 
-    private String tableID;
+    private String tableInfo;
     private String tablePlace;
     private Boolean available;
     private Boolean occupied;
     private String Occupant;
-    private String tableDigit;
+    private String tablePlaceInfo;
+    private String tableID;
+    private long currentPoint;
+    private long newPoint;
+    private HashMap<String,Long> locationVisited;
+    private long oldVisitNumber;
+    private long newVisitNumber;
+    
+    BackEndFactory QRBackEnd;
+    BackendLocations QRLocationsDatabase;
+    DatabaseReference QRReference;
+    BackendUser QRUserDatabase;
+    DatabaseReference QRUserReference;
+    HashMap<ArrayList<String>,BackendLocations.tableData> tableInformation;
 
     String tableLocation;
     ArrayList<String> personalDetails;
@@ -91,102 +104,132 @@ public class HomePage extends AppCompatActivity {
         locationPic = (ImageButton) findViewById(R.id.locationPic);
         locationText = (TextView)findViewById(R.id.bookingDetailsTV);
 
-        firebase = FirebaseDatabase.getInstance("https://coshare-795d4.firebaseio.com/");
-        myRef = firebase.getReference(); //get access to the root of the Firebase JSON tree
-
-        // username = getIntent().getStringExtra("user");
-
         placeID = new HashMap<String, String>();
-        placeID.put("1", "Bugis");
-        placeID.put("2", "Orchard");
+        placeID.put("amk", "Ang Mo Kio");
+        placeID.put("bgs", "Bugis");
+        placeID.put("dbg", "Dhoby Ghaut");
+        placeID.put("hqs", "HQ");
+        placeID.put("ocd", "Orchard");
+        placeID.put("tmp", "Tampines");
 
-        tableID = getIntent().getStringExtra("barcode"); //get the data from the camera live view intent
+        tableInfo = getIntent().getStringExtra("barcode"); //get the data from the camera live view intent
 
         sharedPreferences = getSharedPreferences(nameOfSharedPreferences, Context.MODE_PRIVATE);
         username = sharedPreferences.getString("Username","");
+        
+        QRBackEnd = new BackEndFactory();
+        QRLocationsDatabase = (BackendLocations) QRBackEnd.getBackend("locations");
+        QRReference = QRLocationsDatabase.initialise();
 
+        QRUserDatabase = (BackendUser) QRBackEnd.getBackend("users");
+        QRUserReference = QRUserDatabase.initialise();
 
         //addListenerForSingleValueEvent: executes OnDataChange method immediately and after executing that method once it stops listening to the reference location it is attached to
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        QRReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 try {
                     //if the data received is not null
-                    if (tableID != null) {
+                    if (tableInfo != null) {
+                        tablePlaceInfo = tableInfo.substring(0,3); //get the first 3 alphabets for tablePlaceInfo
 
-                        tableDigit = Character.toString(tableID.charAt(5));
-                        //search for the table location with the 6th index of the tableID
-                        tablePlace = placeID.get(tableDigit);
+                        tableID = tableInfo.substring(3); //get the tableID
+                        //search for the table location with the first 3 alphabets of tablePlaceInfo
+                        tablePlace = placeID.get(tablePlaceInfo);
+                        //Extract the entire table
+                        tableInformation= QRLocationsDatabase.getEntireTable(dataSnapshot);
 
-                        occupied = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Current Status").getValue(Boolean.class);
-                        Log.i("Norman","hi"+String.valueOf(occupied));
-                        available = (Boolean) dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Availability").getValue(Boolean.class);
-                        Log.i("Norman","bye"+String.valueOf(available));
-                        Occupant = dataSnapshot.child("Locations").child(tablePlace).child(tableID).child("Occupant").getValue(String.class);
-                        Log.i("Norman","byebye"+Occupant);
-                        Log.i("Norman","hihi"+username);
+                        //create keys to search for the hashmap received from backendfactory
+                        ArrayList<String> keys = new ArrayList<String>();
+                        keys.add(tablePlace);
+                        keys.add(tableID);
+
+                        if (tableInformation.containsKey(keys)){
+                            BackendLocations.tableData status = (BackendLocations.tableData)tableInformation.get(keys);
+                            occupied = status.currentStatus;
+                            available = status.availability;
+                            Occupant = status.occupant;
+
+                            Log.i("Norman","hi"+String.valueOf(occupied));
+                            Log.i("Norman","bye"+String.valueOf(available));
+                            Log.i("Norman","no" + Occupant);
+
+                            if ((!available)) {
+                                if ((!occupied)) {
+                                    if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied
+                                        Toast.makeText(getApplicationContext(), "Welcome " + Occupant, Toast.LENGTH_LONG).show();
+                                        QRReference.child(tablePlace).child(tableID).child("Current Status").setValue(true);
+                                        QRUserReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                                currentPoint = QRUserDatabase.getUserPoints(dataSnapshot,phoneNumber);
+                                                Log.i("Norman","currentPoint"+currentPoint);
+                                                newPoint = currentPoint + 50;
+                                                QRUserReference.child(phoneNumber).child("Points").setValue(newPoint);
+
+                                                locationVisited = QRUserDatabase.getLocationsVisited(dataSnapshot,phoneNumber);
+                                                oldVisitNumber = locationVisited.get(tablePlace);
+                                                newVisitNumber = oldVisitNumber + 1;
+                                                QRUserReference.child(phoneNumber).child("Locations").child(tablePlace).setValue(newVisitNumber);
 
 
-                        if ((!available)) {
-                            if ((!occupied)) {
-                                if (username.equals(Occupant)) {  //if the table is booked, and the table is not occupied and the user matched, update current status to occupied
-                                    Toast.makeText(getApplicationContext(), "Welcome " + Occupant, Toast.LENGTH_LONG).show();
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(true);
-                                    Integer currentPoint = dataSnapshot.child("Users").child(phoneNumber).child("Points").getValue(Integer.class);
-                                    Integer newPoint = currentPoint + 50;
-                                    myRef.child("Users").child(phoneNumber).child("Points").setValue(newPoint);
-                                    Integer oldVisitNumber = dataSnapshot.child("Users").child(phoneNumber).child("Locations").child(tablePlace).getValue(Integer.class);
-                                    Integer newVisitNumber = oldVisitNumber + 1;
-                                    myRef.child("Users").child(phoneNumber).child("Locations").child(tablePlace).setValue(newVisitNumber);
+                                            }
 
-                                } else { //User scanned the wrong table
-                                    AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
-                                    wrongDialog.setTitle("Opps...");
-                                    wrongDialog.setMessage("It seems that you have scanned the wrong table!");
-                                    wrongDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                            Intent intent = new Intent(HomePage.this, CameraActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    wrongDialog.show();
+                                            @Override
+                                            public void onCancelled(DatabaseError databaseError) {
+
+                                            }
+                                        });
+ 
+                                    } else { //User scanned the wrong table
+                                        AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
+                                        wrongDialog.setTitle("Opps...");
+                                        wrongDialog.setMessage("It seems that you have scanned the wrong table!");
+                                        wrongDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                Intent intent = new Intent(HomePage.this, CameraActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        wrongDialog.show();
+                                    }
+                                } else {
+                                    if (username.equals(Occupant)) {  //if the table is booked, the table is occupied and the user matched, unbooked the user (User leaving the place)
+                                        Toast.makeText(getApplicationContext(), "Thank you for using.", Toast.LENGTH_LONG).show();
+                                        QRReference.child(tablePlace).child(tableID).child("Availability").setValue(true);  //true = table is not booked
+                                        QRReference.child(tablePlace).child(tableID).child("Occupant").setValue(" ");
+                                        QRReference.child(tablePlace).child(tableID).child("Current Status").setValue(false); // false = table is not occupied
+                                        QRUserReference.child(phoneNumber).child("Booking Status").setValue(" ");
+                                    } else { //(User scans the wrong table)
+                                        AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
+                                        wrongDialog.setTitle("Opps...");
+                                        wrongDialog.setMessage("It seems that someone is using this table!");
+                                        wrongDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                dialog.dismiss();
+                                                Intent intent = new Intent(HomePage.this, CameraActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        });
+                                        wrongDialog.show();
+                                    }
+
                                 }
-                            } else {
-                                if (username.equals(Occupant)) {  //if the table is booked, the table is occupied and the user matched, unbooked the user (User leaving the place)
-                                    Toast.makeText(getApplicationContext(), "Thank you for using.", Toast.LENGTH_LONG).show();
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Availability").setValue(true);  //true = table is not booked
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Occupant").setValue(" ");
-                                    myRef.child("Locations").child(tablePlace).child(tableID).child("Current Status").setValue(false); // false = table is not occupied
-                                    myRef.child("Users").child(phoneNumber).child("Booking Status").setValue(" ");
-                                } else { //(User scans the wrong table)
-                                    AlertDialog wrongDialog = new AlertDialog.Builder(HomePage.this).create();
-                                    wrongDialog.setTitle("Opps...");
-                                    wrongDialog.setMessage("It seems that someone is using this table!");
-                                    wrongDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            dialog.dismiss();
-                                            Intent intent = new Intent(HomePage.this, CameraActivity.class);
-                                            startActivity(intent);
-                                        }
-                                    });
-                                    wrongDialog.show();
-                                }
+                            } else if (available) { //if the user scan an unbook table
+                                AlertDialog requestDialog = new AlertDialog.Builder(HomePage.this).create();
+                                requestDialog.setTitle("Opps...");
+                                requestDialog.setMessage("It seems that no one booked this table!");
+                                requestDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                        Intent intent = new Intent(HomePage.this, CameraActivity.class);
+                                        startActivity(intent);
+                                    }
+                                });
+                                requestDialog.show();
 
                             }
-                        } else if ((available)) { //if the user scan an unbook table
-                            AlertDialog requestDialog = new AlertDialog.Builder(HomePage.this).create();
-                            requestDialog.setTitle("Opps...");
-                            requestDialog.setMessage("It seems that no one booked this table!");
-                            requestDialog.setButton(android.app.AlertDialog.BUTTON_POSITIVE, "OK", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                    Intent intent = new Intent(HomePage.this, CameraActivity.class);
-                                    startActivity(intent);
-                                }
-                            });
-                            requestDialog.show();
-
                         }
                     }
 
@@ -213,6 +256,7 @@ public class HomePage extends AppCompatActivity {
 
             }
         });
+
 
 
         befwhole = new BackEndFactory();
